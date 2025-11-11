@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeFi - MIRZA ECOSYSTEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/zH0cmJ4S/mirzalogo.png">
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        * {margin:0;padding:0;box-sizing:border-box;}
+        :root{--bg:#0a1128;--accent:#00f0f0;--text:#ffffff;--success:#00ff88;--error:#ff4444;--warning:#ffaa00;}
+        body{font-family:'Exo 2', sans-serif;background:linear-gradient(135deg,#0a1128,#192d55);color:var(--text);min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative;}
+
+        /* Wallet Connect Section */
+        .wallet-connect-section {
+            background: linear-gradient(135deg, rgba(10, 17, 40, 0.95), rgba(25, 45, 85, 0.95));
+            border: 2px solid #00f0f0;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 240, 240, 0.3);
+        }
+
+        .wallet-title {
+            font-family: 'Orbitron', monospace;
+            color: #00f0f0;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .wallet-subtitle {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .wallet-connect-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #00f0f0, #0080ff);
+            color: #0a1128;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .wallet-connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 240, 240, 0.5);
+        }
+
+        .wallet-connect-btn.connected {
+            background: linear-gradient(135deg, #00c8c8, #0066cc);
+            cursor: not-allowed;
+        }
+
+        .wallet-info {
+            background: rgba(0, 240, 240, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 240, 240, 0.3);
+        }
+
+        .wallet-status, .wallet-address, .wallet-network {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(0, 240, 240, 0.2);
+        }
+
+        .wallet-status:last-child, .wallet-address:last-child, .wallet-network:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .status-label, .address-label, .network-label {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .status-connected {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .wallet-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .wallet-action-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--accent);
+            background: rgba(0, 240, 240, 0.1);
+            color: var(--accent);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-action-btn:hover {
+            background: rgba(0, 240, 240, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid #0a1128;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Send Token Box */
+        .send-token-box {
+            background: linear-gradient(135deg, rgba(25,45,85,0.95), rgba(10,17,40,0.95));
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(0, 240, 240, 0.4);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .send-token-box.connected {
+            animation: pulse-glow 2s ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 30px rgba(0, 240, 240, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(0, 240, 240, 0.8); }
+            100% { box-shadow: 0 0 30px rgba(0, 240, 240, 0.4); }
+        }
+
+        .send-token-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 240, 240, 0.3);
+        }
+
+        .send-token-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 240, 240, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--accent);
+        }
+
+        .send-token-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--accent);
+        }
+
+        .send-token-title {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-status:hover {
+            background: rgba(0, 240, 240, 0.1);
+        }
+
+        .wallet-status.connected {
+            cursor: pointer;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--error);
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.connected {
+            background: var(--success);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.8;
+            flex: 1;
+        }
+
+        .disconnect-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .wallet-status:hover .disconnect-icon {
+            opacity: 0.7;
+        }
+
+        .wallet-status:hover .disconnect-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .wallet-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .balance-item {
+            background: rgba(0, 240, 240, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 240, 0.3);
+            text-align: center;
+        }
+
+        .balance-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-value {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .send-token-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            background: rgba(10, 17, 40, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 240, 240, 0.5);
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-button .form-input {
+            flex: 1;
+        }
+
+        .max-button {
+            background: rgba(0, 240, 240, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .max-button:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .wallet-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00f0f0, #0080ff);
+            color: #0a1128;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 240, 240, 0.5);
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 240, 240, 0.7);
+        }
+
+        .action-button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .action-button.secondary {
+            background: rgba(0, 240, 240, 0.1);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .action-button.secondary:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Side Menu Bar */
+        .side-menu-container{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:rgba(10,17,40,0.98);backdrop-filter:blur(10px);border-right:2px solid rgba(0,240,240,0.5);z-index:1000;transition:left 0.4s ease;box-shadow:5px 0 30px rgba(0,0,0,0.5);overflow-y:auto;}
+        .side-menu-container.active{left:0;}
+        .menu-header{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid rgba(0,240,240,0.3);text-align:center;}
+        .menu-logo{display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;margin-bottom:1rem;}
+        .menu-logo-img{width:50px;height:50px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 15px rgba(0,240,240,0.5);overflow:hidden;}
+        .menu-logo-img img{width:100%;height:100%;object-fit:cover;}
+        .menu-brand{font-family:'Orbitron', monospace;font-weight:900;color:var(--accent);font-size:1.5rem;text-shadow:0 0 10px rgba(0,240,240,0.5);}
+        .menu-nav{list-style:none;padding:1.5rem 0;}
+        .menu-link{display:block;color:var(--text);text-decoration:none;font-weight:600;padding:1rem 1.5rem;transition:all 0.3s ease;font-size:1rem;position:relative;border-bottom:1px solid rgba(0,240,240,0.1);}
+        .menu-link:hover{color:var(--accent);padding-left:2rem;}
+        .menu-link.active{color:var(--accent);background:rgba(0,240,240,0.15);border-left:4px solid var(--accent);}
+        .menu-toggle{position:fixed;top:20px;left:20px;width:45px;height:45px;background:rgba(10,17,40,0.9);border:2px solid var(--accent);border-radius:8px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;cursor:pointer;z-index:999;transition:all 0.3s ease;box-shadow:0 0 15px rgba(0,240,240,0.3);}
+        .menu-toggle:hover{background:rgba(0,240,240,0.1);}
+        .menu-toggle span{display:block;height:3px;width:25px;background-color:var(--accent);border-radius:3px;transition:all 0.3s ease;}
+        .menu-toggle.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+        .menu-toggle.active span:nth-child(2){opacity:0;}
+        .menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+        /* DeFi Page Content */
+        .container{max-width:1200px;margin:0 auto;padding:2rem;position:relative;z-index:2;transition:transform 0.4s ease;}
+        .container.menu-open{transform:translateX(280px);}
+        .header{display:flex;align-items:center;justify-content:center;margin-bottom:3rem;gap:2rem;flex-wrap:wrap;}
+        .logo{width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid #00f0f0;box-shadow:0 0 30px rgba(0,240,240,0.7);}
+        .logo img{width:100%;height:100%;object-fit:cover;}
+        .title{font-family:'Orbitron', monospace;font-size:3rem;font-weight:900;color:#00f0f0;text-shadow:0 0 20px rgba(0,240,240,0.8);letter-spacing:2px;text-align:center;}
+        .defi-grid{display:flex;flex-direction:column;gap:2rem;margin:3rem 0;}
+        .defi-card{background:linear-gradient(135deg, rgba(25,45,85,0.9), rgba(10,17,40,0.9));border:2px solid var(--accent);border-radius:20px;padding:2.5rem;transition:all 0.3s ease;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;}
+        .defi-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,240,240,0.3);}
+        .defi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg, var(--accent), #0080ff);}
+        .defi-logo{width:80px;height:80px;border-radius:50%;overflow:hidden;border:2px solid var(--accent);box-shadow:0 0 20px rgba(0,240,240,0.5);margin:0 auto 1.5rem auto;}
+        .defi-logo img{width:100%;height:100%;object-fit:cover;}
+        .defi-title{font-family:'Orbitron', monospace;color:var(--accent);font-size:1.5rem;margin-bottom:1rem;font-weight:700;text-align:center;}
+        .defi-features{list-style:none;margin:1.5rem 0;text-align:center;}
+        .defi-features li{padding:0.5rem 0;border-bottom:1px solid rgba(0,240,240,0.2);display:flex;align-items:center;justify-content:center;gap:0.5rem;}
+        .defi-features li:before{content:'✓';color:var(--accent);font-weight:bold;}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1.5rem;margin:2rem 0;}
+        .stat-card{background:rgba(0,240,240,0.1);border:1px solid var(--accent);border-radius:15px;padding:1.5rem;text-align:center;transition:all 0.3s ease;}
+        .stat-card:hover{transform:translateY(-5px);background:rgba(0,240,240,0.15);box-shadow:0 10px 25px rgba(0,240,240,0.3);}
+        .stat-value{font-family:'Orbitron', monospace;font-size:2.5rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;}
+        .stat-label{color:var(--text);opacity:0.8;font-size:0.9rem;}
+        
+        /* Staking Form Styles */
+        .staking-form {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 240, 240, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 240, 240, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .input-label {
+            font-weight: 600;
+            color: var(--accent);
+            min-width: 120px;
+        }
+        
+        .amount-input {
+            flex: 1;
+            background: rgba(10, 17, 40, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            max-width: 200px;
+        }
+        
+        .amount-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 240, 240, 0.5);
+        }
+        
+        .user-stats {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 240, 240, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 240, 0.2);
+            width: 100%;
+        }
+        
+        .user-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 240, 240, 0.1);
+        }
+        
+        .user-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .user-stat-label {
+            color: var(--text);
+            opacity: 0.8;
+        }
+        
+        .user-stat-value {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Action Buttons Grid */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Swap & LP Styles */
+        .swap-lp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .swap-lp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .swap-section, .lp-section {
+            background: rgba(0, 240, 240, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 240, 240, 0.2);
+            padding: 1.5rem;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .input-label {
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .form-input {
+            background: rgba(10, 17, 40, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 240, 240, 0.5);
+        }
+        
+        .form-select {
+            background: rgba(10, 17, 40, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            flex: 1;
+            background: rgba(0, 240, 240, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .btn.primary {
+            background: linear-gradient(135deg, #00f0f0, #0080ff);
+            color: var(--bg);
+        }
+        
+        .status {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            min-height: 20px;
+        }
+        
+        .status.success {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .status.error {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+        
+        .status.info {
+            background: rgba(0, 240, 240, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .info-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 240, 240, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 240, 240, 0.2);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .info-label {
+            color: var(--text);
+            opacity: 0.8;
+        }
+        
+        .info-value {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1001;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: var(--success);
+            border-left: 5px solid #00cc66;
+        }
+        
+        .notification.error {
+            background: var(--error);
+            border-left: 5px solid #cc0000;
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+            border-left: 5px solid #cc8800;
+            color: #333;
+        }
+        
+        .notification.info {
+            background: var(--accent);
+            border-left: 5px solid #0080ff;
+            color: #0a1128;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .main-footer{background:rgba(10,17,40,0.95);border-top:2px solid rgba(0,240,240,0.5);padding:3rem 0;margin-top:4rem;text-align:center;position:relative;z-index:2;}
+        .footer-content{max-width:1200px;margin:0 auto;padding:0 2rem;}
+        .social-links{display:flex;justify-content:center;gap:1.5rem;margin:2rem 0;flex-wrap:wrap;}
+        .social-link{display:inline-flex;align-items:center;gap:0.5rem;color:var(--accent);text-decoration:none;padding:0.8rem 1.5rem;border:2px solid var(--accent);border-radius:10px;transition:all 0.3s ease;font-weight:600;}
+        .social-link:hover{background:var(--accent);color:var(--bg);transform:translateY(-3px);}
+        .social-icon{width:20px;height:20px;filter:brightness(0) invert(1);}
+        .social-link:hover .social-icon{filter:brightness(0) saturate(100%);}
+        .ecosystem-text{color:#00f0f0;font-weight:900;text-transform:uppercase;letter-spacing:2px;font-family:'Orbitron', monospace;}
+        .mirza-text{color:#00f0f0;font-weight:900;text-transform:uppercase;font-family:'Orbitron', monospace;}
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .wallet-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .defi-card {
+                padding: 1.5rem;
+            }
+            
+            .send-token-box {
+                padding: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+
+            .wallet-connect-section {
+                padding: 1.5rem;
+                margin: 1.5rem auto;
+            }
+
+            .wallet-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .wallet-connect-section {
+                padding: 1.2rem;
+            }
+
+            .wallet-title {
+                font-size: 1.3rem;
+            }
+
+            .wallet-connect-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Menu Bar -->
+    <div class="side-menu-container" id="sideMenu">
+        <div class="menu-header">
+            <a href="index.html" class="menu-logo">
+                <div class="menu-logo-img">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
+                </div>
+                <span class="menu-brand">MIRZA</span>
+            </a>
+        </div>
+        <ul class="menu-nav">
+            <li><a href="index.html" class="menu-link">Home</a></li>
+            <li><a href="mint.html" class="menu-link">Mint SBT</a></li>
+            <li><a href="defi.html" class="menu-link active">DeFi</a></li>
+            <li><a href="ecosystem.html" class="menu-link">Ecosystem</a></li>
+            <li><a href="roadmap.html" class="menu-link">Roadmap</a></li>
+        </ul>
+    </div>
+
+    <!-- Menu Toggle Button -->
+    <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- DeFi Page Content -->
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <div class="logo">
+                <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
+            </div>
+            <h1 class="title"><span class="ecosystem-text">MIRZA DeFi</span></h1>
+        </div>
+
+        <!-- Wallet Connect Section -->
+        <div class="wallet-connect-section">
+            <div class="wallet-container">
+                <h3 class="wallet-title">CONNECT YOUR WALLET</h3>
+                <p class="wallet-subtitle">Connect to access all MIRZA DeFi features</p>
+                
+                <button class="wallet-connect-btn" id="defiConnectWalletBtn">
+                    <span class="btn-text">CONNECT WALLET</span>
+                    <div class="btn-spinner" id="defiBtnSpinner"></div>
+                </button>
+                
+                <div class="wallet-info" id="defiWalletInfo" style="display: none;">
+                    <div class="wallet-status">
+                        <span class="status-label">Status:</span>
+                        <span class="status-connected">Connected</span>
+                    </div>
+                    <div class="wallet-address">
+                        <span class="address-label">Account:</span>
+                        <span id="defiShortAddress">—</span>
+                    </div>
+                    <div class="wallet-network">
+                        <span class="network-label">Network:</span>
+                        <span id="defiNetworkInfo">—</span>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="wallet-action-btn" id="defiDisconnectBtn">Disconnect</button>
+                        <button class="wallet-action-btn" id="defiAddTokenBtn">Add MIRZA Token</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">$2.5M+</div>
+                <div class="stat-label">TOTAL VALUE LOCKED</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15K+</div>
+                <div class="stat-label">ACTIVE USERS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2.5%</div>
+                <div class="stat-label">APY AVERAGE</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">TRADING AVAILABLE</div>
+            </div>
+        </div>
+
+        <!-- Send Token Box -->
+        <div class="send-token-box" id="sendTokenBox">
+            <div class="send-token-header">
+                <div class="send-token-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21,7.28V5c0-1.1-0.9-2-2-2H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-2.28 c0.59-0.35,1-0.98,1-1.72V9C22,8.26,21.59,7.63,21,7.28z M20,9v6h-7V9H20z M5,19V5h14v2h-6c-1.1,0-2,0.9-2,2v6c0,1.1,0.9,2,2,2h6v2H5z"/>
+                        <circle cx="16" cy="12" r="1.5"/>
+                    </svg>
+                </div>
+                <div class="send-token-title">SEND TOKEN</div>
+            </div>
+            
+            <div class="wallet-status" id="walletStatus">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <div class="status-text" id="statusText">Not Connected</div>
+                <svg class="disconnect-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </div>
+            
+            <div class="wallet-summary" id="walletSummary" style="display: none;">
+                <div class="balance-item">
+                    <div class="balance-label">ETH Balance</div>
+                    <div class="balance-value" id="ethBalance">0.0000 ETH</div>
+                </div>
+                <div class="balance-item">
+                    <div class="balance-label">MIRZA Balance</div>
+                    <div class="balance-value" id="mirzaBalance">0.0000 MIRZA</div>
+                </div>
+            </div>
+            
+            <div class="send-token-form" id="sendTokenForm" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Recipient Address</label>
+                    <input type="text" id="recipientAddress" class="form-input" placeholder="0x...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Amount to Send</label>
+                    <div class="input-with-button">
+                        <input type="number" id="sendAmount" class="form-input" placeholder="0.0" min="0" step="0.1">
+                        <button class="max-button" id="maxButton">MAX</button>
+                    </div>
+                </div>
+                
+                <div class="wallet-actions">
+                    <button class="action-button" id="sendTokenButton">SEND TOKENS</button>
+                </div>
+            </div>
+            
+            <div class="wallet-actions">
+                <button class="action-button" id="connectWalletButton">CONNECT WALLET</button>
+            </div>
+        </div>
+
+        <!-- Swap & Liquidity Pool Section -->
+        <div class="swap-lp-grid">
+            <!-- Swap Section -->
+            <div class="swap-section">
+                <h2 class="section-title">SWAP TOKENS</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.8;">Trade between ETH and MIRZA instantly</p>
+                
+                <div class="input-group">
+                    <div class="input-row">
+                        <label class="input-label">Swap Direction</label>
+                        <select id="swapDirection" class="form-select">
+                            <option value="ethToToken">ETH → MIRZA</option>
+                            <option value="tokenToEth">MIRZA → ETH</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-row">
+                        <label class="input-label">Input Amount</label>
+                        <input type="number" id="swapInput" class="form-input" placeholder="0.0" min="0" step="0.001">
+                    </div>
+                    
+                    <div class="input-row">
+                        <label class="input-label">Estimated Output</label>
+                        <input type="number" id="swapOutput" class="form-input" placeholder="0.0" readonly>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" id="swapApproveBtn">APPROVE</button>
+                    <button class="btn primary" id="swapExecuteBtn">SWAP</button>
+                </div>
+                
+                <div class="status" id="swapStatus"></div>
+            </div>
+            
+            <!-- Liquidity Pool Section -->
+            <div class="lp-section">
+                <h2 class="section-title">LIQUIDITY POOL</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.8;">Provide liquidity to earn fees</p>
+                
+                <div class="input-group">
+                    <div class="input-row">
+                        <label class="input-label">MIRZA Amount</label>
+                        <input type="number" id="lpMirzaAmount" class="form-input" placeholder="0.0" min="0" step="0.001">
+                    </div>
+                    
+                    <div class="input-row">
+                        <label class="input-label">ETH Required</label>
+                        <input type="number" id="lpEthAmount" class="form-input" placeholder="0.0" readonly>
+                    </div>
+                    
+                    <div class="input-row">
+                        <label class="input-label">Remove LP %</label>
+                        <select id="lpRemovePercent" class="form-select">
+                            <option value="25">25%</option>
+                            <option value="50">50%</option>
+                            <option value="75">75%</option>
+                            <option value="100">100%</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" id="lpApproveBtn">APPROVE MIRZA</button>
+                    <button class="btn primary" id="lpAddBtn">ADD LIQUIDITY</button>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" id="lpApproveRemoveBtn">APPROVE LP</button>
+                    <button class="btn" id="lpRemoveBtn">REMOVE LIQUIDITY</button>
+                </div>
+                
+                <div class="status" id="lpStatus"></div>
+                
+                <div class="info-panel">
+                    <div class="info-row">
+                        <span class="info-label">Your LP Balance:</span>
+                        <span class="info-value" id="lpBalance">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pool Share:</span>
+                        <span class="info-value" id="poolShare">0%</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Price:</span>
+                        <span class="info-value" id="currentPrice">1 ETH = 0 MIRZA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DeFi Products Grid - Single Column Layout -->
+        <div class="defi-grid">
+            <!-- Staking Card -->
+            <div class="defi-card">
+                <div class="defi-logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="Staking">
+                </div>
+                <h2 class="defi-title">STAKING</h2>
+                <p>Earn passive income by staking your MIRZA tokens</p>
+                <ul class="defi-features">
+                    <li>Flexible staking periods</li>
+                    <li>Competitive APY returns</li>
+                    <li>Partial unstaking available</li>
+                    <li>Rewards claimed when unstaking</li>
+                </ul>
+                
+                <div class="staking-form">
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label class="input-label">Amount to Stake:</label>
+                            <input type="number" id="stakeAmount" class="amount-input" placeholder="0.0" min="0" step="0.1">
+                            <button class="max-button" id="stakeMaxButton">MAX</button>
+                        </div>
+                        <div class="input-row">
+                            <label class="input-label">Amount to Unstake:</label>
+                            <input type="number" id="unstakeAmount" class="amount-input" placeholder="0.0" min="0" step="0.1">
+                            <button class="max-button" id="unstakeMaxButton">MAX</button>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-button" id="stakeButton">STAKE TOKENS</button>
+                        <button class="action-button secondary" id="unstakeButton">UNSTAKE</button>
+                    </div>
+                    
+                    <div class="user-stats" id="stakingStats">
+                        <div class="user-stat">
+                            <span class="user-stat-label">Your Staked Balance:</span>
+                            <span class="user-stat-value" id="stakedBalance">0 MIRZA</span>
+                        </div>
+                        <div class="user-stat">
+                            <span class="user-stat-label">Pending Rewards:</span>
+                            <span class="user-stat-value" id="pendingRewards">0 MIRZA</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Single button for checking rewards -->
+                    <div class="action-buttons" style="margin-top: 1rem;">
+                        <button class="action-button secondary" id="checkRewardButton" style="width: 100%;">CHECK REWARDS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div style="text-align:center;margin:4rem 0;">
+            <button class="action-button" id="mintSbtButton" style="font-size: 1.3rem; padding: 1.5rem 3rem;">MINT SBT NOW</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="mirza-text">© 2025 MIRZA ECOSYSTEM</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384017.png" class="social-icon"> Twitter</a>
+                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384015.png" class="social-icon"> Telegram</a>
+                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384013.png" class="social-icon"> Discord</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script>
+        // Contract Addresses
+        const MIRZA_TOKEN = "0xEf6A9AA442191Ecdb7B1Dd26DBE727DBA6731E16";
+        const ROUTER = "0xeE567Fe1712Faf6149d80dA1E6934E354124CfE3";
+        const PAIR = "0xc531Bee521AE8CfC546566e3449E862dB2bef460";
+        const STAKING_CONTRACT = "0xde8EFE8f37086512378e207DB43C6C07377Ac323";
+
+        // ABIs
+        const ERC20_ABI = [
+            "function approve(address spender, uint256 amount) external returns (bool)",
+            "function allowance(address owner, address spender) external view returns (uint256)",
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function symbol() view returns (string)",
+            "function transfer(address to, uint256 amount) external returns (bool)"
+        ];
+
+        const ROUTER_ABI = [
+            "function addLiquidityETH(address token, uint amountTokenDesired, uint amountTokenMin, uint amountETHMin, address to, uint deadline) payable returns (uint amountToken, uint amountETH, uint liquidity)",
+            "function removeLiquidityETH(address token, uint liquidity, uint amountTokenMin, uint amountETHMin, address to, uint deadline) returns (uint amountToken, uint amountETH)",
+            "function getAmountsOut(uint amountIn, address[] memory path) view returns (uint[] memory amounts)",
+            "function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) payable returns (uint[] memory amounts)",
+            "function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) returns (uint[] memory amounts)"
+        ];
+
+        const PAIR_ABI = [
+            "function getReserves() view returns (uint112,uint112,uint32)",
+            "function token0() view returns (address)",
+            "function token1() view returns (address)",
+            "function balanceOf(address owner) view returns (uint256)",
+            "function totalSupply() view returns (uint256)",
+            "function MINIMUM_LIQUIDITY() view returns (uint256)",
+            "function approve(address spender, uint256 amount) external returns (bool)"
+        ];
+
+        const STAKING_ABI = [
+            { "inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            { "inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},
+            { "inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"pendingReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+            { "inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"rewardDebt","type":"uint256"}],"stateMutability":"view","type":"function"},
+            { "inputs":[],"name":"stakingEnabled","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}
+        ];
+
+        let provider, signer, userAddr;
+        let routerContract, pairContract, mirzaToken, stakingContract;
+
+        // DOM Elements
+        const connectWalletButton = document.getElementById('connectWalletButton');
+        const walletStatus = document.getElementById('walletStatus');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const walletSummary = document.getElementById('walletSummary');
+        const sendTokenForm = document.getElementById('sendTokenForm');
+        const ethBalanceElement = document.getElementById('ethBalance');
+        const mirzaBalanceElement = document.getElementById('mirzaBalance');
+        const recipientAddress = document.getElementById('recipientAddress');
+        const sendAmount = document.getElementById('sendAmount');
+        const maxButton = document.getElementById('maxButton');
+        const sendTokenButton = document.getElementById('sendTokenButton');
+
+        // Swap & LP Elements
+        const swapDirection = document.getElementById('swapDirection');
+        const swapInput = document.getElementById('swapInput');
+        const swapOutput = document.getElementById('swapOutput');
+        const swapApproveBtn = document.getElementById('swapApproveBtn');
+        const swapExecuteBtn = document.getElementById('swapExecuteBtn');
+        const swapStatus = document.getElementById('swapStatus');
+        
+        const lpMirzaAmount = document.getElementById('lpMirzaAmount');
+        const lpEthAmount = document.getElementById('lpEthAmount');
+        const lpRemovePercent = document.getElementById('lpRemovePercent');
+        const lpApproveBtn = document.getElementById('lpApproveBtn');
+        const lpAddBtn = document.getElementById('lpAddBtn');
+        const lpApproveRemoveBtn = document.getElementById('lpApproveRemoveBtn');
+        const lpRemoveBtn = document.getElementById('lpRemoveBtn');
+        const lpStatus = document.getElementById('lpStatus');
+        const lpBalance = document.getElementById('lpBalance');
+        const poolShare = document.getElementById('poolShare');
+        const currentPrice = document.getElementById('currentPrice');
+
+        /* Utility Functions */
+        function short(addr){ 
+            return addr ? addr.slice(0,6)+"..."+addr.slice(-4) : "—"; 
+        }
+
+        function toDisplayBN(bn, decimals=18){ 
+            try { 
+                return ethers.utils.formatUnits(bn, decimals); 
+            } catch(e){ 
+                return bn.toString(); 
+            } 
+        }
+
+        // Initialize the application
+        document.addEventListener("DOMContentLoaded", () => {
+            setupMobileMenu();
+            setupEventListeners();
+            
+            if (window.ethereum) {
+                checkConnection();
+            } else {
+                showNotification('Please install MetaMask to use this dApp', 'error');
+                connectWalletButton.textContent = 'INSTALL METAMASK';
+                connectWalletButton.onclick = () => window.open('https://metamask.io/download.html', '_blank');
+            }
+        });
+
+        // Check if wallet is already connected
+        async function checkConnection() {
+            try {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                const accounts = await provider.listAccounts();
+                if (accounts.length > 0) {
+                    await initializeContracts();
+                }
+            } catch (error) {
+                console.log('No wallet connected');
+            }
+        }
+
+        // Initialize contracts
+        async function initializeContracts() {
+            try {
+                signer = provider.getSigner();
+                userAddr = await signer.getAddress();
+                
+                console.log("Initializing contracts...");
+                
+                // Initialize contracts with signer
+                routerContract = new ethers.Contract(ROUTER, ROUTER_ABI, signer);
+                pairContract = new ethers.Contract(PAIR, PAIR_ABI, signer);
+                mirzaToken = new ethers.Contract(MIRZA_TOKEN, ERC20_ABI, signer);
+                stakingContract = new ethers.Contract(STAKING_CONTRACT, STAKING_ABI, signer);
+                
+                console.log("Contracts initialized successfully");
+                
+                updateSendTokenDisplay();
+                updateBalances();
+                updateUserStats();
+                updateLPInfo();
+                setupMirzaAuto();
+                setupSwapEstimator();
+                
+                showNotification('Wallet connected successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error initializing contracts:', error);
+                showNotification('Error initializing contracts: ' + error.message, 'error');
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            connectWalletButton.addEventListener('click', connectWallet);
+            
+            walletStatus.addEventListener('click', function() {
+                if (userAddr) {
+                    disconnectWallet();
+                }
+            });
+            
+            maxButton.addEventListener('click', setMaxSendAmount);
+            sendTokenButton.addEventListener('click', sendTokens);
+            
+            document.getElementById('stakeButton').addEventListener('click', stakeTokens);
+            document.getElementById('unstakeButton').addEventListener('click', unstakeTokens);
+            document.getElementById('checkRewardButton').addEventListener('click', checkReward);
+            document.getElementById('stakeMaxButton').addEventListener('click', setMaxStakeAmount);
+            document.getElementById('unstakeMaxButton').addEventListener('click', setMaxUnstakeAmount);
+            
+            document.getElementById('mintSbtButton').addEventListener('click', mintSbt);
+            
+            // Swap & LP event listeners
+            swapInput.addEventListener('input', estimateSwapOutput);
+            swapDirection.addEventListener('change', resetSwapFields);
+            swapApproveBtn.addEventListener('click', approveMirzaForSwap);
+            swapExecuteBtn.addEventListener('click', executeSwap);
+            
+            lpMirzaAmount.addEventListener('input', calculateETHRequired);
+            lpApproveBtn.addEventListener('click', approveMirzaForLP);
+            lpAddBtn.addEventListener('click', addLiquidity);
+            lpApproveRemoveBtn.addEventListener('click', approveLPForRemove);
+            lpRemoveBtn.addEventListener('click', removeLiquidity);
+        }
+
+        // Connect wallet
+        async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    showNotification('Please install MetaMask', 'error');
+                    return;
+                }
+                
+                console.log("Connecting wallet...");
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                
+                // Request account access
+                await provider.send("eth_requestAccounts", []);
+                console.log("Wallet connected, initializing contracts...");
+                
+                await initializeContracts();
+                
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                showNotification('Error connecting wallet: ' + error.message, 'error');
+            }
+        }
+
+        // Disconnect wallet
+        function disconnectWallet() {
+            userAddr = null;
+            updateSendTokenDisplay();
+            showNotification('Wallet disconnected', 'info');
+        }
+
+        // Update send token display
+        function updateSendTokenDisplay() {
+            if (userAddr) {
+                statusIndicator.classList.add('connected');
+                statusText.textContent = `Connected: ${short(userAddr)}`;
+                walletStatus.classList.add('connected');
+                walletSummary.style.display = 'grid';
+                sendTokenForm.style.display = 'flex';
+                connectWalletButton.style.display = 'none';
+                sendTokenBox.classList.add('connected');
+            } else {
+                statusIndicator.classList.remove('connected');
+                statusText.textContent = 'Not Connected';
+                walletStatus.classList.remove('connected');
+                walletSummary.style.display = 'none';
+                sendTokenForm.style.display = 'none';
+                connectWalletButton.style.display = 'block';
+                sendTokenBox.classList.remove('connected');
+            }
+        }
+
+        // Update user balances
+        async function updateBalances() {
+            if (!userAddr) return;
+            
+            try {
+                const ethBalance = await provider.getBalance(userAddr);
+                const ethBalanceFormatted = ethers.utils.formatEther(ethBalance);
+                ethBalanceElement.textContent = `${parseFloat(ethBalanceFormatted).toFixed(6)} ETH`;
+                
+                const tokenBalance = await mirzaToken.balanceOf(userAddr);
+                const tokenBalanceFormatted = ethers.utils.formatEther(tokenBalance);
+                mirzaBalanceElement.textContent = `${parseFloat(tokenBalanceFormatted).toFixed(6)} MIRZA`;
+                
+            } catch (error) {
+                console.error('Error updating balances:', error);
+            }
+        }
+
+        // Send tokens function
+        async function sendTokens() {
+            if (!userAddr) {
+                showNotification('Please connect your wallet first', 'warning');
+                return;
+            }
+            
+            const amount = sendAmount.value;
+            const recipient = recipientAddress.value;
+            
+            if (!amount || parseFloat(amount) <= 0) {
+                showNotification('Please enter a valid amount', 'warning');
+                return;
+            }
+            
+            if (!recipient || !ethers.utils.isAddress(recipient)) {
+                showNotification('Please enter a valid recipient address', 'warning');
+                return;
+            }
+            
+            try {
+                sendTokenButton.disabled = true;
+                sendTokenButton.innerHTML = '<span class="spinner"></span> SENDING...';
+                
+                const amountWei = ethers.utils.parseEther(amount);
+                console.log("Sending tokens...");
+                const tx = await mirzaToken.transfer(recipient, amountWei);
+                console.log("Transaction sent:", tx.hash);
+                await tx.wait();
+                
+                showNotification(`Successfully sent ${amount} MIRZA tokens to ${short(recipient)}`, 'success');
+                sendAmount.value = '';
+                recipientAddress.value = '';
+                await updateBalances();
+                
+            } catch (error) {
+                console.error('Error sending tokens:', error);
+                showNotification('Error sending tokens: ' + error.message, 'error');
+            } finally {
+                sendTokenButton.disabled = false;
+                sendTokenButton.textContent = 'SEND TOKENS';
+            }
+        }
+
+        // Set max send amount
+        function setMaxSendAmount() {
+            const balanceText = mirzaBalanceElement.textContent;
+            const balance = parseFloat(balanceText);
+            if (!isNaN(balance)) {
+                sendAmount.value = balance.toFixed(6);
+            }
+        }
+
+        // Update user stats for staking
+        async function updateUserStats() {
+            if (!userAddr) return;
+            
+            try {
+                const stakeInfo = await stakingContract.stakes(userAddr);
+                const stakedBalanceFormatted = ethers.utils.formatEther(stakeInfo.amount);
+                document.getElementById('stakedBalance').textContent = `${parseFloat(stakedBalanceFormatted).toFixed(6)} MIRZA`;
+                
+                const rewards = await stakingContract.pendingReward(userAddr);
+                const rewardsFormatted = ethers.utils.formatEther(rewards);
+                document.getElementById('pendingRewards').textContent = `${parseFloat(rewardsFormatted).toFixed(6)} MIRZA`;
+                
+            } catch (error) {
+                console.error('Error updating user stats:', error);
+            }
+        }
+
+        // Stake tokens
+        async function stakeTokens() {
+            if (!userAddr) {
+                showNotification('Please connect your wallet first', 'warning');
+                return;
+            }
+            
+            const amount = document.getElementById('stakeAmount').value;
+            if (!amount || parseFloat(amount) <= 0) {
+                showNotification('Please enter a valid amount', 'warning');
+                return;
+            }
+            
+            try {
+                const stakeButton = document.getElementById('stakeButton');
+                stakeButton.disabled = true;
+                stakeButton.innerHTML = '<span class="spinner"></span> STAKING...';
+                
+                const amountWei = ethers.utils.parseEther(amount);
+                
+                // First, approve the staking contract to spend tokens
+                console.log("Approving tokens for staking...");
+                const approveTx = await mirzaToken.approve(STAKING_CONTRACT, amountWei);
+                await approveTx.wait();
+                
+                // Then, stake the tokens
+                console.log("Staking tokens...");
+                const stakeTx = await stakingContract.stake(amountWei);
+                await stakeTx.wait();
+                
+                showNotification(`Successfully staked ${amount} MIRZA tokens!`, 'success');
+                document.getElementById('stakeAmount').value = '';
+                await updateBalances();
+                await updateUserStats();
+                
+            } catch (error) {
+                console.error('Error staking tokens:', error);
+                showNotification('Error staking tokens: ' + error.message, 'error');
+            } finally {
+                document.getElementById('stakeButton').disabled = false;
+                document.getElementById('stakeButton').textContent = 'STAKE TOKENS';
+            }
+        }
+
+        // Unstake tokens
+        async function unstakeTokens() {
+            if (!userAddr) {
+                showNotification('Please connect your wallet first', 'warning');
+                return;
+            }
+            
+            const unstakeAmountInput = document.getElementById('unstakeAmount');
+            const amount = unstakeAmountInput.value;
+            
+            if (!amount || parseFloat(amount) <= 0) {
+                showNotification('Please enter a valid amount to unstake', 'warning');
+                return;
+            }
+            
+            try {
+                const unstakeButton = document.getElementById('unstakeButton');
+                unstakeButton.disabled = true;
+                unstakeButton.innerHTML = '<span class="spinner"></span> UNSTAKING...';
+                
+                const amountWei = ethers.utils.parseEther(amount);
+                console.log("Unstaking tokens...");
+                const receipt = await stakingContract.unstake(amountWei);
+                await receipt.wait();
+                
+                showNotification(`Successfully unstaked ${amount} MIRZA tokens and claimed rewards!`, 'success');
+                unstakeAmountInput.value = '';
+                
+                await updateBalances();
+                await updateUserStats();
+                
+            } catch (error) {
+                console.error('Error unstaking tokens:', error);
+                showNotification('Error unstaking tokens: ' + error.message, 'error');
+            } finally {
+                document.getElementById('unstakeButton').disabled = false;
+                document.getElementById('unstakeButton').textContent = 'UNSTAKE';
+            }
+        }
+
+        // Check reward
+        async function checkReward() {
+            if (!userAddr) {
+                showNotification('Please connect your wallet first', 'warning');
+                return;
+            }
+            
+            try {
+                const checkRewardButton = document.getElementById('checkRewardButton');
+                checkRewardButton.disabled = true;
+                checkRewardButton.innerHTML = '<span class="spinner"></span> CHECKING...';
+                
+                await updateUserStats();
+                const rewards = document.getElementById('pendingRewards').textContent;
+                showNotification(`Your pending rewards: ${rewards}`, 'info');
+                
+            } catch (error) {
+                console.error('Error checking reward:', error);
+                showNotification('Error checking reward: ' + error.message, 'error');
+            } finally {
+                document.getElementById('checkRewardButton').disabled = false;
+                document.getElementById('checkRewardButton').textContent = 'CHECK REWARDS';
+            }
+        }
+
+        // Set max stake amount
+        function setMaxStakeAmount() {
+            const balanceText = mirzaBalanceElement.textContent;
+            const balance = parseFloat(balanceText);
+            if (!isNaN(balance)) {
+                document.getElementById('stakeAmount').value = balance.toFixed(6);
+            }
+        }
+
+        // Set max unstake amount
+        function setMaxUnstakeAmount() {
+            const stakedText = document.getElementById('stakedBalance').textContent;
+            const staked = parseFloat(stakedText);
+            if (!isNaN(staked)) {
+                document.getElementById('unstakeAmount').value = staked.toFixed(6);
+            }
+        }
+
+        /* ---------- LP & Swap Functions ---------- */
+
+        /* Update LP info */
+        async function updateLPInfo(){
+            if(!provider || !userAddr) return;
+            try{
+                const readPair = pairContract.connect(provider);
+                const [r0, r1] = await readPair.getReserves();
+                const t0 = await readPair.token0();
+                const t1 = await readPair.token1();
+
+                const totalSupply = await readPair.totalSupply();
+                const lpBal = await readPair.balanceOf(userAddr);
+
+                let depositedMirza, depositedETH;
+                if(t0.toLowerCase() === MIRZA_TOKEN.toLowerCase()){
+                    depositedMirza = lpBal.mul(r0).div(totalSupply);
+                    depositedETH = lpBal.mul(r1).div(totalSupply);
+                } else {
+                    depositedMirza = lpBal.mul(r1).div(totalSupply);
+                    depositedETH = lpBal.mul(r0).div(totalSupply);
+                }
+
+                lpBalance.textContent = toDisplayBN(lpBal, 18);
+                
+                // Calculate pool share percentage
+                const sharePercentage = lpBal.mul(10000).div(totalSupply).toNumber() / 100;
+                poolShare.textContent = sharePercentage.toFixed(4) + '%';
+
+                // Calculate current price
+                let priceText = "";
+                try {
+                    if(t0.toLowerCase() === MIRZA_TOKEN.toLowerCase()){
+                        const mirzaPerETH = r1.mul(ethers.constants.WeiPerEther).div(r0);
+                        priceText = `1 ETH = ${ethers.utils.formatUnits(mirzaPerETH, 18).substring(0,8)} MIRZA`;
+                    } else {
+                        const mirzaPerETH = r0.mul(ethers.constants.WeiPerEther).div(r1);
+                        priceText = `1 ETH = ${ethers.utils.formatUnits(mirzaPerETH, 18).substring(0,8)} MIRZA`;
+                    }
+                } catch(e){ 
+                    priceText = "Price unavailable";
+                }
+                currentPrice.textContent = priceText;
+            } catch(e){
+                console.error("updateLPInfo failed", e);
+            }
+        }
+
+        /* MIRZA -> ETH auto-calc using reserves */
+        function setupMirzaAuto(){
+            if(!pairContract) return;
+            const readPair = pairContract.connect(provider);
+            lpMirzaAmount.addEventListener("input", async () => {
+                const v = lpMirzaAmount.value;
+                if(!v || Number(v) <= 0){ 
+                    lpEthAmount.value = ""; 
+                    return; 
+                }
+                try{
+                    const mirzaAmount = ethers.utils.parseUnits(v.toString(), 18);
+                    const [res0, res1] = await readPair.getReserves();
+                    const t0 = await readPair.token0();
+                    
+                    let mirzaReserve = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? res0 : res1;
+                    let ethReserve = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? res1 : res0;
+                    
+                    if(mirzaReserve.isZero()){ 
+                        lpEthAmount.value = "0"; 
+                        return; 
+                    }
+                    
+                    const ethAmount = mirzaAmount.mul(ethReserve).div(mirzaReserve);
+                    lpEthAmount.value = ethers.utils.formatEther(ethAmount);
+                } catch(e){
+                    console.error("ETH calculation error", e);
+                    lpEthAmount.value = "";
+                }
+            });
+        }
+
+        /* Approve MIRZA to Router for LP */
+        async function approveMirzaForLP() {
+            if(!mirzaToken || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            const v = lpMirzaAmount.value;
+            if(!v || Number(v) <= 0) {
+                showNotification('Enter MIRZA amount to approve', 'warning');
+                return;
+            }
+            
+            try {
+                lpStatus.innerText = "Approving MIRZA...";
+                lpStatus.className = "status info";
+                
+                const amount = ethers.utils.parseUnits(v.toString(), 18);
+                console.log("Approving MIRZA for LP...");
+                const tx = await mirzaToken.approve(ROUTER, amount);
+                console.log("Approval transaction:", tx.hash);
+                await tx.wait();
+                
+                lpStatus.innerText = "MIRZA approved for liquidity!";
+                lpStatus.className = "status success";
+                
+            } catch(e) {
+                console.error("Approve error:", e);
+                lpStatus.innerText = "Approve failed: " + (e.reason || e.message || e);
+                lpStatus.className = "status error";
+            }
+        }
+
+        /* Add liquidity via router.addLiquidityETH */
+        async function addLiquidity() {
+            if(!routerContract || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            const v = lpMirzaAmount.value; 
+            const ethV = lpEthAmount.value;
+            
+            if(!v || Number(v) <= 0 || !ethV || Number(ethV) <= 0) {
+                showNotification('Enter MIRZA amount (ETH will be calculated automatically)', 'warning');
+                return;
+            }
+
+            try {
+                lpStatus.innerText = "Adding liquidity...";
+                lpStatus.className = "status info";
+                
+                const amountTokenDesired = ethers.utils.parseUnits(v.toString(), 18);
+                const value = ethers.utils.parseEther(ethV.toString());
+                const deadline = Math.floor(Date.now()/1000) + 60*20; // 20 minutes
+                
+                console.log("Adding liquidity with params:", {
+                    token: MIRZA_TOKEN,
+                    amountTokenDesired: amountTokenDesired.toString(),
+                    value: value.toString(),
+                    deadline
+                });
+                
+                const tx = await routerContract.addLiquidityETH(
+                    MIRZA_TOKEN,
+                    amountTokenDesired,
+                    0, // slippage min token
+                    0, // slippage min eth
+                    userAddr,
+                    deadline,
+                    { value: value }
+                );
+                
+                console.log("Add liquidity transaction:", tx.hash);
+                await tx.wait();
+                
+                lpStatus.innerText = "Liquidity added successfully!";
+                lpStatus.className = "status success";
+                
+                await updateLPInfo();
+                await updateBalances();
+                
+            } catch(e) {
+                console.error("Add liquidity error:", e);
+                lpStatus.innerText = "Add liquidity failed: " + (e.reason || e.message || e);
+                lpStatus.className = "status error";
+            }
+        }
+
+        /* Approve LP tokens to router for remove */
+        async function approveLPForRemove() {
+            if(!pairContract || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            try {
+                lpStatus.innerText = "Approving LP tokens...";
+                lpStatus.className = "status info";
+                
+                // Approve max
+                console.log("Approving LP tokens...");
+                const tx = await pairContract.approve(ROUTER, ethers.constants.MaxUint256);
+                console.log("LP approval transaction:", tx.hash);
+                await tx.wait();
+                
+                lpStatus.innerText = "LP tokens approved!";
+                lpStatus.className = "status success";
+                
+            } catch(e) {
+                console.error("LP approve error:", e);
+                lpStatus.innerText = "Approve LP failed: " + (e.reason || e.message || e);
+                lpStatus.className = "status error";
+            }
+        }
+
+        /* Remove liquidity using router.removeLiquidityETH */
+        async function removeLiquidity() {
+            if(!routerContract || !pairContract || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            try {
+                lpStatus.innerText = "Preparing removal...";
+                lpStatus.className = "status info";
+                
+                const lpBalance = await pairContract.balanceOf(userAddr);
+                
+                // Check if user has any LP tokens
+                if(lpBalance.isZero()) {
+                    lpStatus.innerText = "No LP tokens to remove";
+                    lpStatus.className = "status error";
+                    return;
+                }
+
+                const percent = Number(lpRemovePercent.value);
+                let liquidityToRemove = lpBalance.mul(percent).div(100);
+
+                // For 100% removal, check minimum liquidity
+                if(percent === 100) {
+                    const MIN = await pairContract.MINIMUM_LIQUIDITY();
+                    if(lpBalance.lte(MIN)) {
+                        lpStatus.innerText = "Cannot remove 100% - below minimum liquidity";
+                        lpStatus.className = "status error";
+                        return;
+                    }
+                    liquidityToRemove = lpBalance.sub(MIN);
+                }
+
+                if(liquidityToRemove.lte(0)) {
+                    lpStatus.innerText = "No liquidity to remove";
+                    lpStatus.className = "status error";
+                    return;
+                }
+
+                // Check allowance
+                const allowance = await pairContract.allowance(userAddr, ROUTER);
+                if(allowance.lt(liquidityToRemove)) {
+                    lpStatus.innerText = "Please approve LP tokens first";
+                    lpStatus.className = "status warning";
+                    return;
+                }
+
+                lpStatus.innerText = "Removing liquidity...";
+                lpStatus.className = "status info";
+                
+                const deadline = Math.floor(Date.now()/1000) + 60*20; // 20 minutes
+                
+                console.log("Removing liquidity with params:", {
+                    token: MIRZA_TOKEN,
+                    liquidity: liquidityToRemove.toString(),
+                    deadline
+                });
+                
+                const tx = await routerContract.removeLiquidityETH(
+                    MIRZA_TOKEN,
+                    liquidityToRemove,
+                    0, // min token out
+                    0, // min eth out
+                    userAddr,
+                    deadline
+                );
+                
+                console.log("Remove liquidity transaction:", tx.hash);
+                await tx.wait();
+                
+                lpStatus.innerText = "Liquidity removed successfully!";
+                lpStatus.className = "status success";
+                
+                await updateLPInfo();
+                await updateBalances();
+                
+            } catch(e) {
+                console.error("Remove liquidity error:", e);
+                lpStatus.innerText = "Remove failed: " + (e.reason || e.message || e);
+                lpStatus.className = "status error";
+            }
+        }
+
+        /* Setup swap estimator */
+        function setupSwapEstimator(){
+            swapInput.addEventListener("input", async () => {
+                await estimateSwapOutput();
+            });
+            
+            swapDirection.addEventListener("change", () => {
+                swapInput.value = ""; 
+                swapOutput.value = "";
+            });
+        }
+
+        /* Estimate output for swap */
+        async function estimateSwapOutput(){
+            try {
+                if(!routerContract) return;
+                
+                const dir = swapDirection.value;
+                const v = swapInput.value;
+                
+                if(!v || Number(v) <= 0) { 
+                    swapOutput.value = ""; 
+                    return; 
+                }
+
+                if(dir === "ethToToken"){
+                    const amountIn = ethers.utils.parseEther(v.toString());
+                    
+                    // Get WETH address from pair
+                    const t0 = await pairContract.token0();
+                    const t1 = await pairContract.token1();
+                    const WETH = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? t1 : t0;
+                    
+                    const amounts = await routerContract.getAmountsOut(amountIn, [WETH, MIRZA_TOKEN]);
+                    const out = amounts[1];
+                    swapOutput.value = ethers.utils.formatUnits(out, 18);
+                    
+                } else {
+                    // tokenToEth : MIRZA -> ETH
+                    const amountIn = ethers.utils.parseUnits(v.toString(), 18);
+                    
+                    // Get WETH address from pair
+                    const t0 = await pairContract.token0();
+                    const t1 = await pairContract.token1();
+                    const WETH = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? t1 : t0;
+                    
+                    const amounts = await routerContract.getAmountsOut(amountIn, [MIRZA_TOKEN, WETH]);
+                    const out = amounts[1];
+                    swapOutput.value = ethers.utils.formatEther(out);
+                }
+            } catch(e) {
+                console.error("Swap estimation error:", e);
+                swapOutput.value = "";
+            }
+        }
+
+        function resetSwapFields() {
+            swapInput.value = ""; 
+            swapOutput.value = "";
+        }
+
+        /* Approve MIRZA for swaps */
+        async function approveMirzaForSwap() {
+            if(!mirzaToken || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            try {
+                swapStatus.innerText = "Approving MIRZA for swap...";
+                swapStatus.className = "status info";
+                
+                console.log("Approving MIRZA for swap...");
+                const tx = await mirzaToken.approve(ROUTER, ethers.constants.MaxUint256);
+                console.log("Swap approval transaction:", tx.hash);
+                await tx.wait();
+                
+                swapStatus.innerText = "MIRZA approved for swapping!";
+                swapStatus.className = "status success";
+                
+            } catch(e) {
+                console.error("Swap approve error:", e);
+                swapStatus.innerText = "Approve failed: " + (e.reason || e.message || e);
+                swapStatus.className = "status error";
+            }
+        }
+
+        /* Execute swap */
+        async function executeSwap() {
+            if(!routerContract || !signer) {
+                showNotification('Connect wallet first', 'warning');
+                return;
+            }
+            
+            const dir = swapDirection.value;
+            const v = swapInput.value;
+            
+            if(!v || Number(v) <= 0) {
+                showNotification('Enter amount', 'warning');
+                return;
+            }
+
+            try {
+                swapStatus.innerText = "Executing swap...";
+                swapStatus.className = "status info";
+                
+                if(dir === "ethToToken"){
+                    const amountIn = ethers.utils.parseEther(v.toString());
+                    
+                    // Get WETH address from pair
+                    const t0 = await pairContract.token0();
+                    const t1 = await pairContract.token1();
+                    const WETH = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? t1 : t0;
+                    const path = [WETH, MIRZA_TOKEN];
+                    const deadline = Math.floor(Date.now()/1000) + 60*20;
+                    
+                    console.log("ETH to Token swap:", {
+                        amountIn: amountIn.toString(),
+                        path,
+                        deadline
+                    });
+                    
+                    const tx = await routerContract.swapExactETHForTokens(
+                        0, // amountOutMin
+                        path,
+                        userAddr,
+                        deadline,
+                        { value: amountIn }
+                    );
+                    
+                    console.log("Swap transaction:", tx.hash);
+                    await tx.wait();
+                    swapStatus.innerText = "ETH → MIRZA swap completed!";
+                    swapStatus.className = "status success";
+                    
+                } else {
+                    // token->ETH
+                    const amountIn = ethers.utils.parseUnits(v.toString(), 18);
+                    
+                    // Check approval
+                    const allowance = await mirzaToken.allowance(userAddr, ROUTER);
+                    if(allowance.lt(amountIn)) {
+                        swapStatus.innerText = "Please approve MIRZA first";
+                        swapStatus.className = "status warning";
+                        return;
+                    }
+                    
+                    // Get WETH address from pair
+                    const t0 = await pairContract.token0();
+                    const t1 = await pairContract.token1();
+                    const WETH = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? t1 : t0;
+                    const path = [MIRZA_TOKEN, WETH];
+                    const deadline = Math.floor(Date.now()/1000) + 60*20;
+                    
+                    console.log("Token to ETH swap:", {
+                        amountIn: amountIn.toString(),
+                        path,
+                        deadline
+                    });
+                    
+                    const tx = await routerContract.swapExactTokensForETH(
+                        amountIn,
+                        0, // amountOutMin
+                        path,
+                        userAddr,
+                        deadline
+                    );
+                    
+                    console.log("Swap transaction:", tx.hash);
+                    await tx.wait();
+                    swapStatus.innerText = "MIRZA → ETH swap completed!";
+                    swapStatus.className = "status success";
+                }
+                
+                await updateLPInfo();
+                await updateBalances();
+                
+            } catch(e) {
+                console.error("Swap execution error:", e);
+                swapStatus.innerText = "Swap failed: " + (e.reason || e.message || e);
+                swapStatus.className = "status error";
+            }
+        }
+
+        /* Periodic refresh */
+        setInterval(() => { 
+            if(userAddr) {
+                updateLPInfo();
+                updateBalances();
+                updateUserStats();
+            } 
+        }, 15000);
+
+        // Other functions
+        async function mintSbt() {
+            if (!userAddr) {
+                showNotification('Please connect your wallet first', 'warning');
+                return;
+            }
+            window.location.href = 'mint.html';
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notificationContainer = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            notificationContainer.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu');
+            const mainContainer = document.getElementById('mainContainer');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            
+            menuToggle.addEventListener('click', function() {
+                sideMenu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+                mainContainer.classList.toggle('menu-open');
+            });
+            
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    sideMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    mainContainer.classList.remove('menu-open');
+                });
+            });
+            
+            document.addEventListener('click', function(event) {
+                const isClickInsideMenu = sideMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && sideMenu.classList.contains('active')) {
+                    sideMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    mainContainer.classList.remove('menu-open');
+                }
+            });
+        }
+
+        /* ---------- Shared Wallet Connection System ---------- */
+        class DefiWalletManager {
+            constructor() {
+                this.provider = null;
+                this.signer = null;
+                this.userAddress = null;
+                this.isConnected = false;
+                
+                // Configuration
+                this.SEPOLIA_CHAIN_ID = "0xaa36a7";
+                this.SEPOLIA_CONFIG = {
+                    chainId: this.SEPOLIA_CHAIN_ID,
+                    chainName: "Sepolia Testnet",
+                    nativeCurrency: {
+                        name: "Sepolia Ether",
+                        symbol: "ETH",
+                        decimals: 18
+                    },
+                    rpcUrls: ["https://eth-sepolia.g.alchemy.com/v2/demo"],
+                    blockExplorerUrls: ["https://sepolia.etherscan.io"]
+                };
+                
+                this.initialize();
+            }
+            
+            initialize() {
+                this.bindEvents();
+                this.checkExistingConnection();
+            }
+            
+            bindEvents() {
+                const connectBtn = document.getElementById('defiConnectWalletBtn');
+                const disconnectBtn = document.getElementById('defiDisconnectBtn');
+                const addTokenBtn = document.getElementById('defiAddTokenBtn');
+                
+                if (connectBtn) {
+                    connectBtn.addEventListener('click', () => this.connectWallet());
+                }
+                if (disconnectBtn) {
+                    disconnectBtn.addEventListener('click', () => this.disconnectWallet());
+                }
+                if (addTokenBtn) {
+                    addTokenBtn.addEventListener('click', () => this.addTokenToWallet());
+                }
+                
+                // Listen for account changes
+                if (window.ethereum) {
+                    window.ethereum.on('accountsChanged', (accounts) => {
+                        if (accounts.length === 0) {
+                            this.disconnectWallet();
+                        } else {
+                            this.handleAccountsChanged(accounts);
+                        }
+                    });
+                    
+                    window.ethereum.on('chainChanged', (chainId) => {
+                        this.handleChainChanged(chainId);
+                    });
+                }
+            }
+            
+            async checkExistingConnection() {
+                // Check if wallet was previously connected from home page
+                const savedConnection = localStorage.getItem('mirza_wallet_connected');
+                const savedAddress = localStorage.getItem('mirza_wallet_address');
+                
+                if (savedConnection === 'true' && savedAddress && window.ethereum) {
+                    try {
+                        const accounts = await window.ethereum.request({ 
+                            method: 'eth_accounts' 
+                        });
+                        
+                        if (accounts.length > 0 && accounts[0].toLowerCase() === savedAddress.toLowerCase()) {
+                            await this.connectWallet(true); // Silent reconnect
+                        }
+                    } catch (error) {
+                        console.log('Auto-connection failed:', error);
+                        this.clearStorage();
+                    }
+                }
+            }
+            
+            async connectWallet(silent = false) {
+                if (!window.ethereum) {
+                    if (!silent) {
+                        alert('Please install MetaMask to connect your wallet.');
+                    }
+                    return false;
+                }
+                
+                try {
+                    this.showLoading(true);
+                    
+                    // Switch to Sepolia network
+                    const networkOk = await this.ensureSepoliaNetwork();
+                    if (!networkOk) {
+                        if (!silent) {
+                            alert('Please switch to Sepolia network to continue.');
+                        }
+                        this.showLoading(false);
+                        return false;
+                    }
+                    
+                    // Request account access
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_requestAccounts' 
+                    });
+                    
+                    if (accounts.length === 0) {
+                        throw new Error('No accounts found');
+                    }
+                    
+                    this.userAddress = accounts[0];
+                    this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                    this.signer = this.provider.getSigner();
+                    this.isConnected = true;
+                    
+                    // Save connection state
+                    this.saveConnectionState();
+                    
+                    // Update UI
+                    this.updateUI();
+                    
+                    // Auto-connect to the DeFi system
+                    await this.autoConnectToDeFi();
+                    
+                    if (!silent) {
+                        this.showMessage('Wallet connected successfully!', 'success');
+                    }
+                    
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Connection error:', error);
+                    if (!silent) {
+                        this.showMessage('Failed to connect wallet', 'error');
+                    }
+                    this.showLoading(false);
+                    return false;
+                }
+            }
+            
+            async autoConnectToDeFi() {
+                // Auto-connect to the existing DeFi system
+                if (this.isConnected && this.userAddress) {
+                    try {
+                        provider = this.provider;
+                        signer = this.signer;
+                        userAddr = this.userAddress;
+                        
+                        // Initialize contracts
+                        routerContract = new ethers.Contract(ROUTER, ROUTER_ABI, signer);
+                        pairContract = new ethers.Contract(PAIR, PAIR_ABI, signer);
+                        mirzaToken = new ethers.Contract(MIRZA_TOKEN, ERC20_ABI, signer);
+                        stakingContract = new ethers.Contract(STAKING_CONTRACT, STAKING_ABI, signer);
+
+                        // Update UI
+                        updateSendTokenDisplay();
+                        updateBalances();
+                        updateUserStats();
+                        updateLPInfo();
+                        setupMirzaAuto();
+                        setupSwapEstimator();
+                        
+                    } catch (error) {
+                        console.error('Auto-connect to DeFi failed:', error);
+                    }
+                }
+            }
+            
+            async ensureSepoliaNetwork() {
+                if (!window.ethereum) return false;
+                
+                try {
+                    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                    
+                    if (chainId !== this.SEPOLIA_CHAIN_ID) {
+                        return await this.switchToSepolia();
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Network check error:', error);
+                    return false;
+                }
+            }
+            
+            async switchToSepolia() {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: this.SEPOLIA_CHAIN_ID }],
+                    });
+                    return true;
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [this.SEPOLIA_CONFIG],
+                            });
+                            return true;
+                        } catch (addError) {
+                            console.error('Error adding Sepolia network:', addError);
+                            return false;
+                        }
+                    } else {
+                        console.error('Error switching to Sepolia:', switchError);
+                        return false;
+                    }
+                }
+            }
+            
+            disconnectWallet() {
+                this.provider = null;
+                this.signer = null;
+                this.userAddress = null;
+                this.isConnected = false;
+                
+                this.clearStorage();
+                this.updateUI();
+                
+                // Also disconnect from DeFi system
+                disconnectWallet();
+                
+                this.showMessage('Wallet disconnected', 'info');
+            }
+            
+            async addTokenToWallet() {
+                if (!window.ethereum) {
+                    alert('Please install MetaMask to add tokens.');
+                    return;
+                }
+                
+                try {
+                    const tokenAddress = "0xEf6A9AA442191Ecdb7B1Dd26DBE727DBA6731E16"; // MIRZA token address
+                    
+                    await window.ethereum.request({
+                        method: 'wallet_watchAsset',
+                        params: {
+                            type: 'ERC20',
+                            options: {
+                                address: tokenAddress,
+                                symbol: 'MIRZA',
+                                decimals: 18,
+                                image: 'https://i.ibb.co/zH0cmJ4S/mirzalogo.png',
+                            },
+                        },
+                    });
+                    
+                    this.showMessage('MIRZA token added to wallet!', 'success');
+                } catch (error) {
+                    console.error('Error adding token:', error);
+                    this.showMessage('Failed to add token', 'error');
+                }
+            }
+            
+            handleAccountsChanged(accounts) {
+                if (accounts.length === 0) {
+                    this.disconnectWallet();
+                } else {
+                    this.userAddress = accounts[0];
+                    this.saveConnectionState();
+                    this.updateUI();
+                    this.autoConnectToDeFi();
+                    this.showMessage('Account changed', 'info');
+                }
+            }
+            
+            handleChainChanged(chainId) {
+                if (chainId !== this.SEPOLIA_CHAIN_ID) {
+                    this.showMessage('Please switch back to Sepolia network', 'warning');
+                } else {
+                    location.reload();
+                }
+            }
+            
+            saveConnectionState() {
+                localStorage.setItem('mirza_wallet_connected', 'true');
+                localStorage.setItem('mirza_wallet_address', this.userAddress);
+                localStorage.setItem('mirza_wallet_network', 'sepolia');
+            }
+            
+            clearStorage() {
+                localStorage.removeItem('mirza_wallet_connected');
+                localStorage.removeItem('mirza_wallet_address');
+                localStorage.removeItem('mirza_wallet_network');
+            }
+            
+            updateUI() {
+                const connectBtn = document.getElementById('defiConnectWalletBtn');
+                const walletInfo = document.getElementById('defiWalletInfo');
+                const shortAddress = document.getElementById('defiShortAddress');
+                const networkInfo = document.getElementById('defiNetworkInfo');
+                
+                if (this.isConnected && this.userAddress) {
+                    // Update connect button
+                    if (connectBtn) {
+                        connectBtn.innerHTML = '<span class="btn-text">CONNECTED</span>';
+                        connectBtn.classList.add('connected');
+                        connectBtn.disabled = true;
+                    }
+                    
+                    // Show wallet info
+                    if (walletInfo) {
+                        walletInfo.style.display = 'block';
+                    }
+                    
+                    // Update address
+                    if (shortAddress) {
+                        shortAddress.textContent = this.shortAddress(this.userAddress);
+                    }
+                    
+                    // Update network
+                    if (networkInfo) {
+                        networkInfo.textContent = 'Sepolia Testnet';
+                    }
+                    
+                } else {
+                    // Reset connect button
+                    if (connectBtn) {
+                        connectBtn.innerHTML = '<span class="btn-text">CONNECT WALLET</span>';
+                        connectBtn.classList.remove('connected');
+                        connectBtn.disabled = false;
+                    }
+                    
+                    // Hide wallet info
+                    if (walletInfo) {
+                        walletInfo.style.display = 'none';
+                    }
+                }
+                
+                this.showLoading(false);
+            }
+            
+            showLoading(show) {
+                const connectBtn = document.getElementById('defiConnectWalletBtn');
+                const spinner = document.getElementById('defiBtnSpinner');
+                
+                if (connectBtn && spinner) {
+                    if (show) {
+                        connectBtn.innerHTML = '<span class="btn-text">CONNECTING...</span>';
+                        spinner.style.display = 'block';
+                        connectBtn.disabled = true;
+                    } else {
+                        if (!this.isConnected) {
+                            connectBtn.innerHTML = '<span class="btn-text">CONNECT WALLET</span>';
+                        }
+                        spinner.style.display = 'none';
+                    }
+                }
+            }
+            
+            showMessage(message, type = 'info') {
+                // You can implement a toast notification system here
+                console.log(`${type.toUpperCase()}: ${message}`);
+                
+                // Simple alert for now
+                if (type === 'error') {
+                    alert(`Error: ${message}`);
+                } else if (type === 'success') {
+                    // Optional: show success message
+                }
+            }
+            
+            shortAddress(address) {
+                if (!address) return "—";
+                return address.slice(0, 6) + "..." + address.slice(-4);
+            }
+        }
+
+        // Initialize wallet manager when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.defiWallet = new DefiWalletManager();
+        });
+    </script>
+</body>
+</html>
