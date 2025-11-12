@@ -192,64 +192,6 @@
             transform: rotate(-45deg) translate(6px, -6px);
         }
 
-        /* Smart Slide Bar */
-        .slide-bar {
-            background: linear-gradient(90deg, rgba(0, 240, 240, 0.1), rgba(0, 240, 240, 0.2), rgba(0, 240, 240, 0.1));
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(0, 240, 240, 0.3);
-            overflow: hidden;
-            position: relative;
-            margin-top: 0;
-        }
-
-        .slide-content {
-            display: flex;
-            animation: slide 25s linear infinite;
-            white-space: nowrap;
-        }
-
-        .slide-item {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 0 2rem;
-            color: var(--accent);
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.9rem;
-        }
-
-        .slide-badge {
-            background: rgba(0, 240, 240, 0.2);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            border: 1px solid var(--accent);
-            font-size: 0.8rem;
-            animation: badgePulse 2s ease-in-out infinite;
-        }
-
-        @keyframes badgePulse {
-            0%, 100% {
-                box-shadow: 0 0 5px rgba(0, 240, 240, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 15px rgba(0, 240, 240, 0.6);
-            }
-        }
-
-        @keyframes slide {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .slide-bar:hover .slide-content {
-            animation-play-state: paused;
-        }
-
         /* Mint Page Content */
         .container {
             max-width: 1200px;
@@ -528,29 +470,62 @@
             border-bottom: none;
         }
 
-        .wallet-action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .wallet-action-button {
-            flex: 1;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--accent);
+        .wallet-balance-summary {
             background: rgba(0, 240, 240, 0.1);
-            color: var(--accent);
-            font-family: 'Exo 2', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            border: 1px solid rgba(0, 240, 240, 0.3);
         }
 
-        .wallet-action-button:hover {
-            background: rgba(0, 240, 240, 0.2);
-            transform: translateY(-2px);
+        .wallet-balance-summary.active {
+            display: block;
+        }
+
+        .balance-title {
+            font-family: 'Orbitron', monospace;
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 240, 240, 0.4);
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .balance-item {
+            background: rgba(0, 240, 240, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(0, 240, 240, 0.2);
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .balance-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .balance-value.mirza {
+            color: var(--accent);
+        }
+
+        .balance-value.eth {
+            color: var(--accent); /* Changed to match MIRZA color */
         }
 
         /* NFT Display Section */
@@ -693,7 +668,7 @@
             pointer-events: none;
         }
 
-        /* Wallet Connect Section */
+        /* Wallet Connect Section - Updated to match DeFi page */
         .wallet-connect-section {
             background: linear-gradient(135deg, rgba(10, 17, 40, 0.95), rgba(25, 45, 85, 0.95));
             border: 2px solid #00f0f0;
@@ -887,19 +862,8 @@
                 height: 240px;
             }
 
-            .slide-item {
-                gap: 1rem;
-                padding: 0 1.5rem;
-                font-size: 0.8rem;
-            }
-
-            .slide-badge {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.6rem;
-            }
-            
-            .wallet-action-buttons {
-                flex-direction: column;
+            .balance-grid {
+                grid-template-columns: 1fr;
             }
 
             .wallet-connect-section {
@@ -1005,17 +969,6 @@
                 font-size: 0.85rem;
                 padding: 0.7rem 1rem;
             }
-            
-            .slide-item {
-                font-size: 0.7rem;
-                gap: 0.8rem;
-                padding: 0 1rem;
-            }
-            
-            .slide-badge {
-                font-size: 0.6rem;
-                padding: 0.2rem 0.5rem;
-            }
         }
     </style>
 </head>
@@ -1046,53 +999,6 @@
         <span></span>
     </div>
 
-    <!-- Smart Slide Bar -->
-    <div class="slide-bar">
-        <div class="slide-content">
-            <div class="slide-item">
-                <span class="slide-badge">NEW</span>
-                <span>🎉 MIRZA SBT CELEBRATION IS LIVE! JOIN THE FESTIVITY 🎉</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">HOT</span>
-                <span>🚀 LIMITED TIME OFFER - MINT YOUR SBT NOW! 🚀</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">UPDATE</span>
-                <span>⭐ EXCLUSIVE REWARDS FOR EARLY SUPPORTERS ⭐</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">ALERT</span>
-                <span>🎊 SPECIAL CELEBRATION BONUSES AVAILABLE 🎊</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">TRENDING</span>
-                <span>🔥 OVER 10,000 SBTs MINTED IN CELEBRATION! 🔥</span>
-            </div>
-            <!-- Duplicate for seamless loop -->
-            <div class="slide-item">
-                <span class="slide-badge">NEW</span>
-                <span>🎉 MIRZA SBT CELEBRATION IS LIVE! JOIN THE FESTIVITY 🎉</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">HOT</span>
-                <span>🚀 LIMITED TIME OFFER - MINT YOUR SBT NOW! 🚀</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">UPDATE</span>
-                <span>⭐ EXCLUSIVE REWARDS FOR EARLY SUPPORTERS ⭐</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">ALERT</span>
-                <span>🎊 SPECIAL CELEBRATION BONUSES AVAILABLE 🎊</span>
-            </div>
-            <div class="slide-item">
-                <span class="slide-badge">TRENDING</span>
-                <span>🔥 OVER 10,000 SBTs MINTED IN CELEBRATION! 🔥</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Mint Page Content -->
     <div class="container" id="mainContainer">
         <div class="header">
@@ -1102,7 +1008,7 @@
             <h1 class="title"><span class="ecosystem-text">MINT YOUR SBT</span></h1>
         </div>
 
-        <!-- Wallet Connect Section -->
+        <!-- Wallet Connect Section - Updated to match DeFi page -->
         <div class="wallet-connect-section">
             <div class="wallet-container">
                 <h3 class="wallet-title">CONNECT YOUR WALLET</h3>
@@ -1158,9 +1064,28 @@
                     <div class="small muted">Status:</div>
                     <div class="small status-success" id="connectionStatus">Connected</div>
                 </div>
-                <div class="wallet-action-buttons">
-                    <button class="wallet-action-button" id="addTokenBtn">Add MIRZA to Wallet</button>
-                    <button class="wallet-action-button" id="disconnectBtn">Disconnect Wallet</button>
+            </div>
+            
+            <!-- Wallet Balance Summary -->
+            <div class="wallet-balance-summary" id="walletBalanceSummary">
+                <h3 class="balance-title">WALLET BALANCE SUMMARY</h3>
+                <div class="balance-grid">
+                    <div class="balance-item">
+                        <div class="balance-label">MIRZA TOKENS</div>
+                        <div class="balance-value mirza" id="mirzaBalance">0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-label">ETH BALANCE</div>
+                        <div class="balance-value eth" id="ethBalance">0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-label">SBT MINTED</div>
+                        <div class="balance-value" id="sbtStatus">No</div>
+                    </div>
+                    <div class="balance-item">
+                        <div class="balance-label">NETWORK</div>
+                        <div class="balance-value" id="balanceNetwork">—</div>
+                    </div>
                 </div>
             </div>
             
@@ -1281,14 +1206,20 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
+        // Mobile menu toggle - FIXED
         function setupMobileMenu() {
             const menuToggle = document.getElementById('menuToggle');
             const sideMenu = document.getElementById('sideMenu');
             const mainContainer = document.getElementById('mainContainer');
             const menuLinks = document.querySelectorAll('.menu-link');
             
-            menuToggle.addEventListener('click', function() {
+            if (!menuToggle || !sideMenu || !mainContainer) {
+                console.error('Menu elements not found');
+                return;
+            }
+            
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
                 sideMenu.classList.toggle('active');
                 menuToggle.classList.toggle('active');
                 mainContainer.classList.toggle('menu-open');
@@ -1367,8 +1298,6 @@
         const faucetBtn = document.getElementById("faucetBtn");
         const approveBtn = document.getElementById("approveBtn");
         const mintBtn = document.getElementById("mintBtn");
-        const addTokenBtn = document.getElementById("addTokenBtn");
-        const disconnectBtn = document.getElementById("disconnectBtn");
         
         const walletStatus = document.getElementById("walletStatus");
         const faucetStatus = document.getElementById("faucetStatus");
@@ -1379,6 +1308,13 @@
         const shortAddr = document.getElementById("shortAddr");
         const networkInfo = document.getElementById("networkInfo");
         const connectionStatus = document.getElementById("connectionStatus");
+
+        // Balance summary elements
+        const walletBalanceSummary = document.getElementById("walletBalanceSummary");
+        const mirzaBalance = document.getElementById("mirzaBalance");
+        const ethBalance = document.getElementById("ethBalance");
+        const sbtStatus = document.getElementById("sbtStatus");
+        const balanceNetwork = document.getElementById("balanceNetwork");
 
         const nftDisplaySection = document.getElementById("nftDisplaySection");
         const nftImage = document.getElementById("nftImage");
@@ -1391,6 +1327,7 @@
         let erc20, faucet, sbt;
         let faucetTimerInterval = null;
         let allowancePollInterval = null;
+        let balancePollInterval = null;
         let hasMintedSBT = false;
         let isProcessing = false;
 
@@ -1426,35 +1363,49 @@
             }
         }
 
-        /* ---------- Add Token to Wallet ---------- */
-        async function addTokenToWallet() {
-            if (!window.ethereum) {
-                alert("Please install MetaMask to add tokens to your wallet.");
-                return;
-            }
-
+        /* ---------- Balance Functions ---------- */
+        async function updateWalletBalances() {
+            if (!provider || !userAddress) return;
+            
             try {
-                const wasAdded = await window.ethereum.request({
-                    method: 'wallet_watchAsset',
-                    params: {
-                        type: 'ERC20',
-                        options: {
-                            address: MIRZA_TOKEN,
-                            symbol: 'MIRZA',
-                            decimals: 18,
-                            image: 'https://i.ibb.co/zH0cmJ4S/mirzalogo.png',
-                        },
-                    },
-                });
-
-                if (wasAdded) {
-                    alert('MIRZA token successfully added to your wallet!');
-                } else {
-                    alert('MIRZA token was not added to your wallet.');
+                // Update ETH balance
+                const ethBalanceBN = await provider.getBalance(userAddress);
+                const ethBalanceValue = parseFloat(ethers.utils.formatEther(ethBalanceBN)).toFixed(4);
+                ethBalance.textContent = `${ethBalanceValue} ETH`;
+                
+                // Update MIRZA balance
+                if (erc20) {
+                    const mirzaBalanceBN = await erc20.balanceOf(userAddress);
+                    const mirzaBalanceValue = fromBN(mirzaBalanceBN);
+                    mirzaBalance.textContent = `${mirzaBalanceValue.toFixed(2)} MIRZA`;
                 }
+                
+                // Update SBT status
+                if (sbt) {
+                    const minted = await sbt.hasMinted(userAddress);
+                    sbtStatus.textContent = minted ? "Yes" : "No";
+                    sbtStatus.style.color = minted ? "var(--success)" : "var(--text)";
+                }
+                
+                // Update network
+                const network = await provider.getNetwork();
+                balanceNetwork.textContent = network.name ? network.name : `Chain ${network.chainId}`;
+                
             } catch (error) {
-                console.error("Error adding token to wallet:", error);
-                alert('There was an error adding the token to your wallet.');
+                console.error("Error updating balances:", error);
+            }
+        }
+        
+        function startBalancePolling() {
+            stopBalancePolling();
+            updateWalletBalances();
+            balancePollInterval = setInterval(updateWalletBalances, 10000); // Update every 10 seconds
+        }
+        
+        function stopBalancePolling() {
+            if (balancePollInterval) {
+                clearInterval(balancePollInterval);
+                balancePollInterval = null;
             }
         }
 
@@ -1551,6 +1502,7 @@
                 
                 shortAddr.innerText = shortAddress(userAddress);
                 walletInfo.classList.add("active");
+                walletBalanceSummary.classList.add("active");
                 nftDisplaySection.classList.add("active");
                 setStatus(walletStatus, "WALLET CONNECTED SUCCESSFULLY", "success");
                 setStatus(connectionStatus, "CONNECTED", "success");
@@ -1558,6 +1510,7 @@
                 await updateNetwork();
                 enableButtonsAfterConnect();
                 startAllowancePolling();
+                startBalancePolling();
                 await refreshFaucetState();
                 await refreshApprovalState();
                 await refreshMintState();
@@ -1600,10 +1553,12 @@
             connectWalletBtn.disabled = false;
             
             walletInfo.classList.remove("active");
+            walletBalanceSummary.classList.remove("active");
             nftDisplaySection.classList.remove("active");
             setStatus(walletStatus, "WALLET NOT CONNECTED");
             stopAllowancePolling();
             stopFaucetTimer();
+            stopBalancePolling();
             disableAllActionButtons();
             hideNFT();
         }
@@ -1680,6 +1635,7 @@
                 setStatus(faucetStatus, "10 MIRZA TOKENS CLAIMED SUCCESSFULLY", "success");
                 await refreshFaucetState();
                 await refreshApprovalState();
+                await updateWalletBalances(); // Update balance after claiming
             }catch(e){
                 console.error(e);
                 setStatus(faucetStatus, "FAUCET CLAIM FAILED", "error");
@@ -1872,6 +1828,7 @@
                 hasMintedSBT = true;
                 await refreshMintState();
                 await displayNFTIfOwned();
+                await updateWalletBalances(); // Update balance after minting
                 
                 approveBtn.disabled = true;
                 mintBtn.disabled = true;
@@ -1964,8 +1921,6 @@
         faucetBtn.addEventListener("click", claimFaucet);
         approveBtn.addEventListener("click", approveTokens);
         mintBtn.addEventListener("click", mintSBT);
-        addTokenBtn.addEventListener("click", addTokenToWallet);
-        disconnectBtn.addEventListener("click", disconnectWallet);
 
         /* ---------- initial state ---------- */
         disableAllActionButtons();
@@ -1974,7 +1929,35 @@
         // Initialize mobile menu
         document.addEventListener('DOMContentLoaded', function() {
             setupMobileMenu();
+            
+            // Check for existing wallet connection from home page
+            checkExistingWalletConnection();
         });
+
+        /* ---------- Wallet Auto-Connection System ---------- */
+        async function checkExistingWalletConnection() {
+            // Check if wallet was previously connected from home page
+            const savedConnection = localStorage.getItem('mirza_wallet_connected');
+            const savedAddress = localStorage.getItem('mirza_wallet_address');
+            
+            if (savedConnection === 'true' && savedAddress && window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_accounts' 
+                    });
+                    
+                    if (accounts.length > 0 && accounts[0].toLowerCase() === savedAddress.toLowerCase()) {
+                        // Auto-connect the wallet
+                        await connectWallet();
+                    }
+                } catch (error) {
+                    console.log('Auto-connection failed:', error);
+                    // Clear invalid connection data
+                    localStorage.removeItem('mirza_wallet_connected');
+                    localStorage.removeItem('mirza_wallet_address');
+                }
+            }
+        }
 
         /* ---------- Shared Wallet Connection System ---------- */
         class MintWalletManager {
@@ -2136,6 +2119,7 @@
                         
                         shortAddr.innerText = shortAddress(userAddress);
                         walletInfo.classList.add("active");
+                        walletBalanceSummary.classList.add("active");
                         nftDisplaySection.classList.add("active");
                         setStatus(walletStatus, "WALLET CONNECTED SUCCESSFULLY", "success");
                         setStatus(connectionStatus, "CONNECTED", "success");
@@ -2143,6 +2127,7 @@
                         await updateNetwork();
                         enableButtonsAfterConnect();
                         startAllowancePolling();
+                        startBalancePolling();
                         await refreshFaucetState();
                         await refreshApprovalState();
                         await refreshMintState();
