@@ -728,16 +728,74 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Footer */
-        .main-footer{background:rgba(10,17,40,0.95);border-top:2px solid rgba(0,240,240,0.5);padding:3rem 0;margin-top:4rem;text-align:center;position:relative;z-index:2;}
-        .footer-content{max-width:1200px;margin:0 auto;padding:0 2rem;}
-        .social-links{display:flex;justify-content:center;gap:1.5rem;margin:2rem 0;flex-wrap:wrap;}
-        .social-link{display:inline-flex;align-items:center;gap:0.5rem;color:var(--accent);text-decoration:none;padding:0.8rem 1.5rem;border:2px solid var(--accent);border-radius:10px;transition:all 0.3s ease;font-weight:600;}
-        .social-link:hover{background:var(--accent);color:var(--bg);transform:translateY(-3px);}
-        .social-icon{width:20px;height:20px;filter:brightness(0) invert(1);}
-        .social-link:hover .social-icon{filter:brightness(0) saturate(100%);}
-        .ecosystem-text{color:#00f0f0;font-weight:900;text-transform:uppercase;letter-spacing:2px;font-family:'Orbitron', monospace;}
-        .mirza-text{color:#00f0f0;font-weight:900;text-transform:uppercase;font-family:'Orbitron', monospace;}
+        /* Footer - Updated to match Mint SBT page */
+        .main-footer {
+            background: rgba(10, 17, 40, 0.95);
+            border-top: 2px solid rgba(0, 240, 240, 0.5);
+            padding: 3rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+
+        .social-link:hover .social-icon {
+            filter: brightness(0) saturate(100%);
+        }
+
+        .ecosystem-text {
+            color: #00f0f0;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .mirza-text {
+            color: #00f0f0;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: 'Orbitron', monospace;
+        }
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
@@ -832,7 +890,7 @@
             <h1 class="title"><span class="ecosystem-text">MIRZA DeFi</span></h1>
         </div>
 
-        <!-- Wallet Connect Section -->
+        <!-- Wallet Connect Section - Same as Mint Page -->
         <div class="wallet-connect-section">
             <div class="wallet-container">
                 <h3 class="wallet-title">CONNECT YOUR WALLET</h3>
@@ -884,7 +942,7 @@
             </div>
         </div>
 
-        <!-- Send Token Box -->
+        <!-- Send Token Box - Wallet connect button and summary removed -->
         <div class="send-token-box" id="sendTokenBox">
             <div class="send-token-header">
                 <div class="send-token-icon">
@@ -932,10 +990,6 @@
                 <div class="wallet-actions">
                     <button class="action-button" id="sendTokenButton">SEND TOKENS</button>
                 </div>
-            </div>
-            
-            <div class="wallet-actions">
-                <button class="action-button" id="connectWalletButton">CONNECT WALLET</button>
             </div>
         </div>
 
@@ -1090,15 +1144,25 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer - Updated to match Mint SBT page -->
     <footer class="main-footer">
         <div class="footer-content">
-            <p class="mirza-text">© 2025 MIRZA ECOSYSTEM</p>
             <div class="social-links">
-                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384017.png" class="social-icon"> Twitter</a>
-                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384015.png" class="social-icon"> Telegram</a>
-                <a href="#" class="social-link"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384013.png" class="social-icon"> Discord</a>
+                <a href="#" class="social-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968823.png" alt="Twitter" class="social-icon">
+                    TWITTER
+                </a>
+                <a href="https://discord.gg/YmVjJxgq9g" target="_blank" class="social-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord" class="social-icon">
+                    DISCORD
+                </a>
+                <a href="#" class="social-link">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968846.png" alt="Github" class="social-icon">
+                    GITHUB
+                </a>
             </div>
+            <p>© 2023 <span class="ecosystem-text">MIRZA ECOSYSTEM</span> ALL RIGHTS RESERVED</p>
+            <p>BUILT FOR THE <span class="mirza-text">MIRZA</span> COMMUNITY</p>
         </div>
     </footer>
 
@@ -1152,7 +1216,6 @@
         let routerContract, pairContract, mirzaToken, stakingContract;
 
         // DOM Elements
-        const connectWalletButton = document.getElementById('connectWalletButton');
         const walletStatus = document.getElementById('walletStatus');
         const statusIndicator = document.getElementById('statusIndicator');
         const statusText = document.getElementById('statusText');
@@ -1202,28 +1265,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             setupMobileMenu();
             setupEventListeners();
-            
-            if (window.ethereum) {
-                checkConnection();
-            } else {
-                showNotification('Please install MetaMask to use this dApp', 'error');
-                connectWalletButton.textContent = 'INSTALL METAMASK';
-                connectWalletButton.onclick = () => window.open('https://metamask.io/download.html', '_blank');
-            }
         });
-
-        // Check if wallet is already connected
-        async function checkConnection() {
-            try {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                const accounts = await provider.listAccounts();
-                if (accounts.length > 0) {
-                    await initializeContracts();
-                }
-            } catch (error) {
-                console.log('No wallet connected');
-            }
-        }
 
         // Initialize contracts
         async function initializeContracts() {
@@ -1258,8 +1300,6 @@
 
         // Set up event listeners
         function setupEventListeners() {
-            connectWalletButton.addEventListener('click', connectWallet);
-            
             walletStatus.addEventListener('click', function() {
                 if (userAddr) {
                     disconnectWallet();
@@ -1290,29 +1330,6 @@
             lpRemoveBtn.addEventListener('click', removeLiquidity);
         }
 
-        // Connect wallet
-        async function connectWallet() {
-            try {
-                if (!window.ethereum) {
-                    showNotification('Please install MetaMask', 'error');
-                    return;
-                }
-                
-                console.log("Connecting wallet...");
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                
-                // Request account access
-                await provider.send("eth_requestAccounts", []);
-                console.log("Wallet connected, initializing contracts...");
-                
-                await initializeContracts();
-                
-            } catch (error) {
-                console.error('Error connecting wallet:', error);
-                showNotification('Error connecting wallet: ' + error.message, 'error');
-            }
-        }
-
         // Disconnect wallet
         function disconnectWallet() {
             userAddr = null;
@@ -1328,7 +1345,6 @@
                 walletStatus.classList.add('connected');
                 walletSummary.style.display = 'grid';
                 sendTokenForm.style.display = 'flex';
-                connectWalletButton.style.display = 'none';
                 sendTokenBox.classList.add('connected');
             } else {
                 statusIndicator.classList.remove('connected');
@@ -1336,7 +1352,6 @@
                 walletStatus.classList.remove('connected');
                 walletSummary.style.display = 'none';
                 sendTokenForm.style.display = 'none';
-                connectWalletButton.style.display = 'block';
                 sendTokenBox.classList.remove('connected');
             }
         }
@@ -2095,7 +2110,7 @@
             });
         }
 
-        /* ---------- Shared Wallet Connection System ---------- */
+        /* ---------- Shared Wallet Connection System - Same as Mint Page ---------- */
         class DefiWalletManager {
             constructor() {
                 this.provider = null;
@@ -2318,7 +2333,8 @@
                 this.updateUI();
                 
                 // Also disconnect from DeFi system
-                disconnectWallet();
+                userAddr = null;
+                updateSendTokenDisplay();
                 
                 this.showMessage('Wallet disconnected', 'info');
             }
