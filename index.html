@@ -467,22 +467,22 @@
         .smart-contract-color { color: var(--defi-green); }
         .crypto-color { color: var(--coin-gold); }
 
-        /* Simplified MIRZA Text */
+        /* Simplified MIRZA Text - INCREASED SIZE */
         .mirza-text {
             font-family: 'Josefin Sans', sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: clamp(1rem, 4vw, 1.2em);
+            font-size: clamp(1.3rem, 5vw, 1.5em); /* Increased font size */
             color: #00f0f0;
             display: inline-block;
         }
 
-        /* Custom M letter for MIRZA */
+        /* Custom M letter for MIRZA - INCREASED SIZE */
         .mirza-first-letter {
             font-family: 'Josefin Sans', sans-serif;
             font-weight: 700;
             color: #00f0f0;
-            font-size: clamp(1.1rem, 4.5vw, 1.3em);
+            font-size: clamp(1.4rem, 5.5vw, 1.6em); /* Increased font size */
             display: inline-block;
         }
 
@@ -506,13 +506,14 @@
             display: inline-block;
         }
 
-        /* Simplified ECOSYSTEM Text */
+        /* Simplified ECOSYSTEM Text - INCREASED SIZE */
         .ecosystem-text {
             color: var(--ecosystem-green) !important;
             font-weight: 900 !important;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-family: 'Orbitron', monospace;
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem); /* Fixed to match quick link title size */
             display: inline-block;
         }
 
@@ -580,6 +581,27 @@
             overflow: hidden;
             border: 2px solid var(--accent);
             margin: 0 auto 1rem auto;
+        }
+
+        /* NEW: Yellow color for specific words in MIRZA SBT card */
+        .yellow-word {
+            color: var(--celebration-yellow) !important;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* NEW: Yellow color for SBT word in MIRZA SBT card */
+        .sbt-yellow {
+            color: var(--celebration-yellow) !important;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* NEW: Green color for UNIQUE word in MIRZA SBT card */
+        .unique-green {
+            color: var(--bright-green) !important;
+            font-weight: 700;
+            display: inline-block;
         }
 
         /* Simplified Text Styles */
@@ -834,7 +856,7 @@
             transform: translateY(-3px);
         }
 
-        /* Simplified Menu Bar Text */
+        /* Simplified Menu Bar Text - INCREASED MIRZA SIZE */
         .menu-link {
             display: block;
             color: var(--text);
@@ -862,7 +884,7 @@
             font-family: 'Josefin Sans', sans-serif;
             font-weight: 700;
             color: var(--accent);
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-size: clamp(1.4rem, 5vw, 1.7rem); /* Increased font size */
             display: inline-block;
         }
 
@@ -1100,7 +1122,7 @@
         
         .title {
             font-family: 'Josefin Sans', sans-serif;
-            font-size: clamp(1.8rem, 8vw, 3.5rem);
+            font-size: clamp(2.2rem, 9vw, 4rem); /* Increased font size */
             font-weight: 700;
             color: #00f0f0;
             letter-spacing: 3px;
@@ -1238,10 +1260,11 @@
             object-fit: cover;
         }
 
+        /* Quick Links Section Title Fix */
         .quick-link-title {
             font-family: 'Orbitron', monospace;
             color: var(--accent);
-            font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem); /* Consistent font size */
             margin-bottom: 1rem;
             font-weight: 700;
         }
@@ -2193,14 +2216,14 @@
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="soulbound-text">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
+                <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">HOT</span>
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="soulbound-text">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
+                <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="sbt-yellow">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">UPDATE</span>
@@ -2221,7 +2244,7 @@
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="future-text">🔥</span> OVER 10,000 <span class="soulbound-text">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
+                <span><span class="future-text">🔥</span> OVER 10,000 <span class="sbt-yellow">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
             </div>
             <!-- Duplicate for seamless loop -->
             <div class="slide-item">
@@ -2229,14 +2252,14 @@
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="soulbound-text">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
+                <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">HOT</span>
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="soulbound-text">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
+                <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="sbt-yellow">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">UPDATE</span>
@@ -2257,7 +2280,7 @@
                 <div class="slide-logo">
                     <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                 </div>
-                <span><span class="future-text">🔥</span> OVER 10,000 <span class="soulbound-text">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
+                <span><span class="future-text">🔥</span> OVER 10,000 <span class="sbt-yellow">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
             </div>
         </div>
     </div>
@@ -2309,7 +2332,7 @@
                     <div class="ad-title-logo">
                         <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                     </div>
-                    <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="soulbound-text">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>
+                    <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>
                 </h3>
                 
                 <div class="features-container">
@@ -2318,7 +2341,7 @@
                             <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
-                            <span class="small-word">Your</span> <span class="identity-text">Digital Identity</span> <span class="small-word">on</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
+                            <span class="yellow-word">Your</span> <span class="identity-text">Digital Identity</span> <span class="small-word">on</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
                         </p>
                     </div>
                     
@@ -2327,7 +2350,7 @@
                             <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
-                            <span class="small-word">Forever</span> <span class="small-word">Linked</span> <span class="small-word">to</span> <span class="small-word">Your</span> <span class="wallet-text">Wallet</span> - <span class="soulbound-text">Soulbound Token</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
+                            <span class="yellow-word">Forever</span> <span class="small-word">Linked</span> <span class="small-word">to</span> <span class="small-word">Your</span> <span class="wallet-text">Wallet</span> - <span class="sbt-yellow">Soulbound Token</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
                         </p>
                     </div>
                     
@@ -2337,7 +2360,7 @@
                             <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
-                            <span class="small-word">Marked</span> <span class="small-word">as</span> <span class="small-word">an</span> <span class="early-text">Early Supporter</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
+                            <span class="yellow-word">Marked</span> <span class="small-word">as</span> <span class="small-word">an</span> <span class="early-text">Early Supporter</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
                         </p>
                     </div>
                     
@@ -2346,14 +2369,14 @@
                             <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
-                            <span class="future-text">Future Beneficial</span> <span class="small-word">access</span> <span class="small-word">to</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
+                            <span class="yellow-word">Future</span> <span class="yellow-word">Beneficial</span> <span class="small-word">access</span> <span class="small-word">to</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
                         </p>
                     </div>
                 </div>
                 
                 <div class="ad-tagline">
                     <p class="tagline-text">
-                        <span class="festival-text">🎉</span> <span class="sepolia-text">SEPOLIA LAUNCH</span> • <span class="nontransfer-text">NON-TRANSFERABLE</span> • <span class="small-word">PERMANENT</span> • <span class="unique-text">UNIQUE</span> <span class="festival-text">🎉</span>
+                        <span class="festival-text">🎉</span> <span class="sepolia-text">SEPOLIA LAUNCH</span> • <span class="nontransfer-text">NON-TRANSFERABLE</span> • <span class="small-word">PERMANENT</span> • <span class="unique-green">UNIQUE</span> <span class="festival-text">🎉</span>
                     </p>
                 </div>
                 
