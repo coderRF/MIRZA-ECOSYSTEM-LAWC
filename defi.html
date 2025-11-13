@@ -10,6 +10,7 @@
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co/zH0cmJ4S/mirzalogo.png">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
+        /* Your existing CSS styles remain unchanged */
         * {margin:0;padding:0;box-sizing:border-box;}
         :root{--bg:#0a1128;--accent:#00f0f0;--text:#ffffff;--success:#00ff88;--error:#ff4444;--warning:#ffaa00;}
         body{font-family:'Exo 2', sans-serif;background:linear-gradient(135deg,#0a1128,#192d55);color:var(--text);min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative;}
@@ -1028,7 +1029,7 @@
                 <div class="status" id="swapStatus"></div>
             </div>
             
-            <!-- Liquidity Pool Section -->
+            <!-- Liquidity Pool Section - Updated with working code -->
             <div class="lp-section">
                 <h2 class="section-title">LIQUIDITY POOL</h2>
                 <p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.8;">Provide liquidity to earn fees</p>
@@ -1036,17 +1037,17 @@
                 <div class="input-group">
                     <div class="input-row">
                         <label class="input-label">MIRZA Amount</label>
-                        <input type="number" id="lpMirzaAmount" class="form-input" placeholder="0.0" min="0" step="0.001">
+                        <input type="number" id="mirzaIn" class="form-input" placeholder="0" step="any">
                     </div>
                     
                     <div class="input-row">
-                        <label class="input-label">ETH Required</label>
-                        <input type="number" id="lpEthAmount" class="form-input" placeholder="0.0" readonly>
+                        <label class="input-label">ETH Required (auto)</label>
+                        <input type="number" id="ethCalc" class="form-input" placeholder="0" readonly>
                     </div>
                     
                     <div class="input-row">
                         <label class="input-label">Remove LP %</label>
-                        <select id="lpRemovePercent" class="form-select">
+                        <select id="lpPercent" class="form-select">
                             <option value="25">25%</option>
                             <option value="50">50%</option>
                             <option value="75">75%</option>
@@ -1056,29 +1057,33 @@
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn" id="lpApproveBtn">APPROVE MIRZA</button>
-                    <button class="btn primary" id="lpAddBtn">ADD LIQUIDITY</button>
+                    <button class="btn" id="approveBtn">APPROVE MIRZA</button>
+                    <button class="btn primary" id="addLpBtn">ADD LIQUIDITY</button>
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn" id="lpApproveRemoveBtn">APPROVE LP</button>
-                    <button class="btn" id="lpRemoveBtn">REMOVE LIQUIDITY</button>
+                    <button class="btn" id="approveLpBtn">APPROVE LP</button>
+                    <button class="btn" id="removeLpBtn">REMOVE LIQUIDITY</button>
                 </div>
                 
-                <div class="status" id="lpStatus"></div>
+                <div class="status" id="liqStatus"></div>
                 
                 <div class="info-panel">
                     <div class="info-row">
                         <span class="info-label">Your LP Balance:</span>
-                        <span class="info-value" id="lpBalance">0</span>
+                        <span class="info-value" id="lpBal">—</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Pool Share:</span>
-                        <span class="info-value" id="poolShare">0%</span>
+                        <span class="info-label">Deposited MIRZA:</span>
+                        <span class="info-value" id="depositedMirza">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Deposited ETH:</span>
+                        <span class="info-value" id="depositedETH">—</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Current Price:</span>
-                        <span class="info-value" id="currentPrice">1 ETH = 0 MIRZA</span>
+                        <span class="info-value" id="priceInfo">—</span>
                     </div>
                 </div>
             </div>
@@ -1236,17 +1241,19 @@
         const swapExecuteBtn = document.getElementById('swapExecuteBtn');
         const swapStatus = document.getElementById('swapStatus');
         
-        const lpMirzaAmount = document.getElementById('lpMirzaAmount');
-        const lpEthAmount = document.getElementById('lpEthAmount');
-        const lpRemovePercent = document.getElementById('lpRemovePercent');
-        const lpApproveBtn = document.getElementById('lpApproveBtn');
-        const lpAddBtn = document.getElementById('lpAddBtn');
-        const lpApproveRemoveBtn = document.getElementById('lpApproveRemoveBtn');
-        const lpRemoveBtn = document.getElementById('lpRemoveBtn');
-        const lpStatus = document.getElementById('lpStatus');
-        const lpBalance = document.getElementById('lpBalance');
-        const poolShare = document.getElementById('poolShare');
-        const currentPrice = document.getElementById('currentPrice');
+        // Liquidity Pool Elements
+        const mirzaIn = document.getElementById('mirzaIn');
+        const ethCalc = document.getElementById('ethCalc');
+        const lpPercent = document.getElementById('lpPercent');
+        const approveBtn = document.getElementById('approveBtn');
+        const addLpBtn = document.getElementById('addLpBtn');
+        const approveLpBtn = document.getElementById('approveLpBtn');
+        const removeLpBtn = document.getElementById('removeLpBtn');
+        const liqStatus = document.getElementById('liqStatus');
+        const lpBalElement = document.getElementById('lpBal');
+        const depositedMirzaElement = document.getElementById('depositedMirza');
+        const depositedETHElement = document.getElementById('depositedETH');
+        const priceInfoElement = document.getElementById('priceInfo');
 
         /* Utility Functions */
         function short(addr){ 
@@ -1323,11 +1330,12 @@
             swapApproveBtn.addEventListener('click', approveMirzaForSwap);
             swapExecuteBtn.addEventListener('click', executeSwap);
             
-            lpMirzaAmount.addEventListener('input', calculateETHRequired);
-            lpApproveBtn.addEventListener('click', approveMirzaForLP);
-            lpAddBtn.addEventListener('click', addLiquidity);
-            lpApproveRemoveBtn.addEventListener('click', approveLPForRemove);
-            lpRemoveBtn.addEventListener('click', removeLiquidity);
+            // Liquidity Pool event listeners
+            mirzaIn.addEventListener('input', calculateETHRequired);
+            approveBtn.addEventListener('click', approveMirzaForLP);
+            addLpBtn.addEventListener('click', addLiquidity);
+            approveLpBtn.addEventListener('click', approveLPForRemove);
+            removeLpBtn.addEventListener('click', removeLiquidity);
         }
 
         // Disconnect wallet
@@ -1580,14 +1588,14 @@
             try{
                 const readPair = pairContract.connect(provider);
                 const [r0, r1] = await readPair.getReserves();
-                const t0 = await readPair.token0();
-                const t1 = await readPair.token1();
+                const t0 = (await readPair.token0()).toLowerCase();
+                const t1 = (await readPair.token1()).toLowerCase();
 
                 const totalSupply = await readPair.totalSupply();
                 const lpBal = await readPair.balanceOf(userAddr);
 
                 let depositedMirza, depositedETH;
-                if(t0.toLowerCase() === MIRZA_TOKEN.toLowerCase()){
+                if(t0 === MIRZA_TOKEN.toLowerCase()){
                     depositedMirza = lpBal.mul(r0).div(totalSupply);
                     depositedETH = lpBal.mul(r1).div(totalSupply);
                 } else {
@@ -1595,16 +1603,14 @@
                     depositedETH = lpBal.mul(r0).div(totalSupply);
                 }
 
-                lpBalance.textContent = toDisplayBN(lpBal, 18);
-                
-                // Calculate pool share percentage
-                const sharePercentage = lpBal.mul(10000).div(totalSupply).toNumber() / 100;
-                poolShare.textContent = sharePercentage.toFixed(4) + '%';
+                // Fix: Use the correct element references
+                lpBalElement.textContent = toDisplayBN(lpBal, 18);
+                depositedMirzaElement.textContent = toDisplayBN(depositedMirza, 18);
+                depositedETHElement.textContent = toDisplayBN(depositedETH, 18);
 
-                // Calculate current price
                 let priceText = "";
                 try {
-                    if(t0.toLowerCase() === MIRZA_TOKEN.toLowerCase()){
+                    if(t0 === MIRZA_TOKEN.toLowerCase()){
                         const mirzaPerETH = r1.mul(ethers.constants.WeiPerEther).div(r0);
                         priceText = `1 ETH = ${ethers.utils.formatUnits(mirzaPerETH, 18).substring(0,8)} MIRZA`;
                     } else {
@@ -1614,42 +1620,38 @@
                 } catch(e){ 
                     priceText = "Price unavailable";
                 }
-                currentPrice.textContent = priceText;
+                priceInfoElement.textContent = priceText;
             } catch(e){
                 console.error("updateLPInfo failed", e);
             }
         }
 
-        /* MIRZA -> ETH auto-calc using reserves */
+        /* MIRZA → ETH auto calc */
         function setupMirzaAuto(){
             if(!pairContract) return;
             const readPair = pairContract.connect(provider);
-            lpMirzaAmount.addEventListener("input", async () => {
-                const v = lpMirzaAmount.value;
-                if(!v || Number(v) <= 0){ 
-                    lpEthAmount.value = ""; 
-                    return; 
-                }
+            mirzaIn.addEventListener("input", async () => {
+                const v = mirzaIn.value;
+                if(!v || Number(v) <= 0){ ethCalc.value = ""; return; }
                 try{
                     const mirzaAmount = ethers.utils.parseUnits(v.toString(), 18);
                     const [res0, res1] = await readPair.getReserves();
-                    const t0 = await readPair.token0();
-                    
-                    let mirzaReserve = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? res0 : res1;
-                    let ethReserve = t0.toLowerCase() === MIRZA_TOKEN.toLowerCase() ? res1 : res0;
-                    
-                    if(mirzaReserve.isZero()){ 
-                        lpEthAmount.value = "0"; 
-                        return; 
-                    }
-                    
+                    const t0 = (await readPair.token0()).toLowerCase();
+                    let mirzaReserve = t0 === MIRZA_TOKEN.toLowerCase() ? res0 : res1;
+                    let ethReserve = t0 === MIRZA_TOKEN.toLowerCase() ? res1 : res0;
+                    if(mirzaReserve.isZero()){ ethCalc.value = "0"; return; }
                     const ethAmount = mirzaAmount.mul(ethReserve).div(mirzaReserve);
-                    lpEthAmount.value = ethers.utils.formatEther(ethAmount);
+                    ethCalc.value = ethers.utils.formatEther(ethAmount);
                 } catch(e){
-                    console.error("ETH calculation error", e);
-                    lpEthAmount.value = "";
+                    console.error("calc", e);
+                    ethCalc.value = "";
                 }
             });
+        }
+
+        /* Calculate ETH required */
+        async function calculateETHRequired() {
+            await setupMirzaAuto();
         }
 
         /* Approve MIRZA to Router for LP */
@@ -1659,15 +1661,15 @@
                 return;
             }
             
-            const v = lpMirzaAmount.value;
+            const v = mirzaIn.value;
             if(!v || Number(v) <= 0) {
                 showNotification('Enter MIRZA amount to approve', 'warning');
                 return;
             }
             
             try {
-                lpStatus.innerText = "Approving MIRZA...";
-                lpStatus.className = "status info";
+                liqStatus.innerText = "Sending approve...";
+                liqStatus.className = "status info";
                 
                 const amount = ethers.utils.parseUnits(v.toString(), 18);
                 console.log("Approving MIRZA for LP...");
@@ -1675,180 +1677,103 @@
                 console.log("Approval transaction:", tx.hash);
                 await tx.wait();
                 
-                lpStatus.innerText = "MIRZA approved for liquidity!";
-                lpStatus.className = "status success";
+                liqStatus.innerText = "Approved MIRZA to router";
+                liqStatus.className = "status success";
                 
             } catch(e) {
                 console.error("Approve error:", e);
-                lpStatus.innerText = "Approve failed: " + (e.reason || e.message || e);
-                lpStatus.className = "status error";
+                liqStatus.innerText = "Approve failed: " + (e.message || e);
+                liqStatus.className = "status error";
             }
         }
 
-        /* Add liquidity via router.addLiquidityETH */
+        /* Add Liquidity */
         async function addLiquidity() {
-            if(!routerContract || !signer) {
-                showNotification('Connect wallet first', 'warning');
-                return;
-            }
-            
-            const v = lpMirzaAmount.value; 
-            const ethV = lpEthAmount.value;
-            
-            if(!v || Number(v) <= 0 || !ethV || Number(ethV) <= 0) {
-                showNotification('Enter MIRZA amount (ETH will be calculated automatically)', 'warning');
-                return;
-            }
+            if(!routerContract || !signer) return alert("Connect wallet first");
+            const v = mirzaIn.value; const ethV = ethCalc.value;
+            if(!v || Number(v) <= 0 || !ethV || Number(ethV) <= 0) return alert("Enter MIRZA amount first");
 
-            try {
-                lpStatus.innerText = "Adding liquidity...";
-                lpStatus.className = "status info";
-                
-                const amountTokenDesired = ethers.utils.parseUnits(v.toString(), 18);
+            try{
+                liqStatus.innerText = "Sending addLiquidityETH...";
+                liqStatus.className = "status info";
+                const amountTokenDesired = ethers.utils.parseUnits(v.toString(),18);
                 const value = ethers.utils.parseEther(ethV.toString());
-                const deadline = Math.floor(Date.now()/1000) + 60*20; // 20 minutes
-                
-                console.log("Adding liquidity with params:", {
-                    token: MIRZA_TOKEN,
-                    amountTokenDesired: amountTokenDesired.toString(),
-                    value: value.toString(),
-                    deadline
-                });
-                
                 const tx = await routerContract.addLiquidityETH(
                     MIRZA_TOKEN,
                     amountTokenDesired,
-                    0, // slippage min token
-                    0, // slippage min eth
+                    0,
+                    0,
                     userAddr,
-                    deadline,
-                    { value: value }
+                    Math.floor(Date.now()/1000) + 600,
+                    { value }
                 );
-                
-                console.log("Add liquidity transaction:", tx.hash);
                 await tx.wait();
-                
-                lpStatus.innerText = "Liquidity added successfully!";
-                lpStatus.className = "status success";
-                
+                liqStatus.innerText = "Liquidity added!";
+                liqStatus.className = "status success";
                 await updateLPInfo();
                 await updateBalances();
-                
-            } catch(e) {
-                console.error("Add liquidity error:", e);
-                lpStatus.innerText = "Add liquidity failed: " + (e.reason || e.message || e);
-                lpStatus.className = "status error";
+            } catch(e){
+                liqStatus.innerText = "Add liquidity failed: " + (e.data?.message || e.message || e);
+                liqStatus.className = "status error";
             }
         }
 
-        /* Approve LP tokens to router for remove */
+        /* Approve LP tokens */
         async function approveLPForRemove() {
-            if(!pairContract || !signer) {
-                showNotification('Connect wallet first', 'warning');
-                return;
-            }
-            
-            try {
-                lpStatus.innerText = "Approving LP tokens...";
-                lpStatus.className = "status info";
-                
-                // Approve max
-                console.log("Approving LP tokens...");
-                const tx = await pairContract.approve(ROUTER, ethers.constants.MaxUint256);
-                console.log("LP approval transaction:", tx.hash);
+            if(!pairContract || !signer) return alert("Connect wallet first");
+            try{
+                liqStatus.innerText = "Approving LP tokens to router...";
+                liqStatus.className = "status info";
+                const pairAsERC20 = new ethers.Contract(PAIR, ERC20_ABI, signer);
+                const tx = await pairAsERC20.approve(ROUTER, ethers.constants.MaxUint256);
                 await tx.wait();
-                
-                lpStatus.innerText = "LP tokens approved!";
-                lpStatus.className = "status success";
-                
-            } catch(e) {
-                console.error("LP approve error:", e);
-                lpStatus.innerText = "Approve LP failed: " + (e.reason || e.message || e);
-                lpStatus.className = "status error";
+                liqStatus.innerText = "LP tokens approved to router";
+                liqStatus.className = "status success";
+            } catch(e){
+                liqStatus.innerText = "Approve LP failed: " + (e.message || e);
+                liqStatus.className = "status error";
             }
         }
 
-        /* Remove liquidity using router.removeLiquidityETH */
+        /* Remove Liquidity */
         async function removeLiquidity() {
-            if(!routerContract || !pairContract || !signer) {
-                showNotification('Connect wallet first', 'warning');
-                return;
-            }
-            
-            try {
-                lpStatus.innerText = "Preparing removal...";
-                lpStatus.className = "status info";
-                
-                const lpBalance = await pairContract.balanceOf(userAddr);
-                
-                // Check if user has any LP tokens
-                if(lpBalance.isZero()) {
-                    lpStatus.innerText = "No LP tokens to remove";
-                    lpStatus.className = "status error";
-                    return;
-                }
+            if(!routerContract || !pairContract || !signer) return alert("Connect wallet first");
+            try{
+                liqStatus.innerText = "Preparing removal...";
+                liqStatus.className = "status info";
+                const readPair = pairContract.connect(provider);
+                const lpBalance = await readPair.balanceOf(userAddr);
+                const MIN = (await readPair.MINIMUM_LIQUIDITY()).add(0);
+                if(lpBalance.lte(MIN)) return liqStatus.innerText = "LP balance too small.";
 
-                const percent = Number(lpRemovePercent.value);
+                const percent = Number(lpPercent.value);
                 let liquidityToRemove = lpBalance.mul(percent).div(100);
-
-                // For 100% removal, check minimum liquidity
-                if(percent === 100) {
-                    const MIN = await pairContract.MINIMUM_LIQUIDITY();
-                    if(lpBalance.lte(MIN)) {
-                        lpStatus.innerText = "Cannot remove 100% - below minimum liquidity";
-                        lpStatus.className = "status error";
-                        return;
-                    }
+                if(percent === 100 && lpBalance.gt(MIN)){
                     liquidityToRemove = lpBalance.sub(MIN);
                 }
 
-                if(liquidityToRemove.lte(0)) {
-                    lpStatus.innerText = "No liquidity to remove";
-                    lpStatus.className = "status error";
-                    return;
+                const pairAsERC20 = new ethers.Contract(PAIR, ERC20_ABI, signer);
+                const allowance = await pairAsERC20.allowance(userAddr, ROUTER);
+                if(allowance.lt(liquidityToRemove)){
+                    return liqStatus.innerText = "Please approve LP tokens first.";
                 }
 
-                // Check allowance
-                const allowance = await pairContract.allowance(userAddr, ROUTER);
-                if(allowance.lt(liquidityToRemove)) {
-                    lpStatus.innerText = "Please approve LP tokens first";
-                    lpStatus.className = "status warning";
-                    return;
-                }
-
-                lpStatus.innerText = "Removing liquidity...";
-                lpStatus.className = "status info";
-                
-                const deadline = Math.floor(Date.now()/1000) + 60*20; // 20 minutes
-                
-                console.log("Removing liquidity with params:", {
-                    token: MIRZA_TOKEN,
-                    liquidity: liquidityToRemove.toString(),
-                    deadline
-                });
-                
                 const tx = await routerContract.removeLiquidityETH(
                     MIRZA_TOKEN,
                     liquidityToRemove,
-                    0, // min token out
-                    0, // min eth out
+                    0,
+                    0,
                     userAddr,
-                    deadline
+                    Math.floor(Date.now()/1000) + 600
                 );
-                
-                console.log("Remove liquidity transaction:", tx.hash);
                 await tx.wait();
-                
-                lpStatus.innerText = "Liquidity removed successfully!";
-                lpStatus.className = "status success";
-                
+                liqStatus.innerText = "Liquidity removed successfully.";
+                liqStatus.className = "status success";
                 await updateLPInfo();
                 await updateBalances();
-                
-            } catch(e) {
-                console.error("Remove liquidity error:", e);
-                lpStatus.innerText = "Remove failed: " + (e.reason || e.message || e);
-                lpStatus.className = "status error";
+            } catch(e){
+                liqStatus.innerText = "Remove failed: " + (e.data?.message || e.message || e);
+                liqStatus.className = "status error";
             }
         }
 
