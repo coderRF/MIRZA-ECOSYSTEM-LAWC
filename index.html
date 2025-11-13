@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
     <!-- Add Momo Trust font -->
     <link href="https://fonts.cdnfonts.com/css/momo-trust" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/QjcgRzkB/mizpp.png">
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/zH0cmJ4S/mirzalogo.png">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         * {
@@ -126,7 +126,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('https://i.ibb.co/QjcgRzkB/mizpp.png') center/contain no-repeat;
+            background: url('https://i.ibb.co/zH0cmJ4S/mirzalogo.png') center/contain no-repeat;
             opacity: 0.05;
             pointer-events: none;
         }
@@ -148,14 +148,47 @@
             object-fit: cover;
         }
 
+        /* Updated Lock Title Styles */
         .lock-title {
-            font-family: 'Orbitron', monospace;
-            color: var(--accent);
-            font-size: 2.5rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: clamp(2.2rem, 9vw, 4rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-align: center;
             margin-bottom: 1rem;
-            letter-spacing: 2px;
             position: relative;
             z-index: 2;
+            line-height: 1.2;
+        }
+
+        .welcome-text {
+            color: var(--bright-white) !important;
+            font-weight: 700;
+            display: block;
+            font-size: clamp(1.8rem, 7vw, 3.2rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .lock-mirza-text {
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: clamp(2.2rem, 9vw, 4rem);
+            color: #00f0f0;
+            display: block;
+            line-height: 1;
+        }
+
+        .lock-ecosystem-text {
+            color: var(--ecosystem-green) !important;
+            font-weight: 900 !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.8rem, 7vw, 3.2rem);
+            display: block;
+            line-height: 1;
+            margin-top: 0.2rem;
         }
 
         .lock-subtitle {
@@ -286,6 +319,7 @@
             color: #ff6b6b;
         }
 
+        /* Rest of the CSS remains the same... */
         /* Crypto Homepage Animation */
         .crypto-animation {
             position: fixed;
@@ -1294,7 +1328,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('https://i.ibb.co/QjcgRzkB/mizpp.png') center/contain no-repeat;
+            background: url('https://i.ibb.co/zH0cmJ4S/mirzalogo.png') center/contain no-repeat;
             opacity: 0.03;
             pointer-events: none;
         }
@@ -2083,9 +2117,13 @@
     <div class="lock-screen" id="lockScreen">
         <div class="lock-container">
             <div class="lock-logo">
-                <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
             </div>
-            <h1 class="lock-title">WELCOME TO MIRZA ECOSYSTEM</h1>
+            <h1 class="lock-title">
+                <span class="welcome-text">WELCOME TO</span>
+                <span class="lock-mirza-text">MIRZA</span>
+                <span class="lock-ecosystem-text">ECOSYSTEM</span>
+            </h1>
             <p class="lock-subtitle">Connect your wallet to access the full experience</p>
             
             <div class="lock-features">
@@ -2134,6 +2172,7 @@
         </div>
     </div>
 
+    <!-- Rest of the HTML remains the same... -->
     <!-- Crypto Homepage Animation -->
     <div class="crypto-animation">
         <div class="hologrid"></div>
@@ -2173,7 +2212,7 @@
         <div class="menu-header">
             <a href="index.html" class="menu-logo">
                 <div class="menu-logo-img">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span class="menu-brand"><span class="mirza-first-letter">M</span>IRZA</span>
             </a>
@@ -2214,35 +2253,35 @@
             <div class="slide-item">
                 <span class="slide-badge">NEW</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">HOT</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="sbt-yellow">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">UPDATE</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="future-text">⭐</span> EXCLUSIVE <span class="reward-text">REWARDS</span> FOR <span class="early-text">EARLY SUPPORTERS</span> <span class="future-text">⭐</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">ALERT</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> SPECIAL <span class="sepolia-text">SEPOLIA</span> <span class="bonuses-text">BONUSES</span> AVAILABLE <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">TRENDING</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="future-text">🔥</span> OVER 10,000 <span class="sbt-yellow">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
             </div>
@@ -2250,35 +2289,35 @@
             <div class="slide-item">
                 <span class="slide-badge">NEW</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>! JOIN THE <span class="sepolia-text">REVOLUTION</span> <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">HOT</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> LIMITED TIME <span class="offer-text">OFFER</span> - <span class="mint-text">MINT</span> YOUR <span class="sbt-yellow">SBT</span> NOW ON <span class="sepolia-text">SEPOLIA</span>! <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">UPDATE</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="future-text">⭐</span> EXCLUSIVE <span class="reward-text">REWARDS</span> FOR <span class="early-text">EARLY SUPPORTERS</span> <span class="future-text">⭐</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">ALERT</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="festival-text">🎉</span> SPECIAL <span class="sepolia-text">SEPOLIA</span> <span class="bonuses-text">BONUSES</span> AVAILABLE <span class="festival-text">🎉</span></span>
             </div>
             <div class="slide-item">
                 <span class="slide-badge">TRENDING</span>
                 <div class="slide-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                 </div>
                 <span><span class="future-text">🔥</span> OVER 10,000 <span class="sbt-yellow">SBTs</span> MINTED ON <span class="sepolia-text">SEPOLIA</span>! <span class="future-text">🔥</span></span>
             </div>
@@ -2289,7 +2328,7 @@
     <div class="container" id="mainContainer">
         <div class="header">
             <div class="logo">
-                <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
             </div>
             <h1 class="title"><span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span></h1>
         </div>
@@ -2330,7 +2369,7 @@
             <div class="ad-content">
                 <h3 class="ad-title">
                     <div class="ad-title-logo">
-                        <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                        <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                     </div>
                     <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="sbt-yellow">SBT</span> <span class="now-on-text">NOW ON</span> <span class="sepolia-text">SEPOLIA</span>
                 </h3>
@@ -2338,7 +2377,7 @@
                 <div class="features-container">
                     <div class="feature">
                         <div class="feature-logo">
-                            <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                            <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
                             <span class="yellow-word">Your</span> <span class="identity-text">Digital Identity</span> <span class="small-word">on</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
@@ -2347,7 +2386,7 @@
                     
                     <div class="feature">
                         <div class="feature-logo">
-                            <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                            <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
                             <span class="yellow-word">Forever</span> <span class="small-word">Linked</span> <span class="small-word">to</span> <span class="small-word">Your</span> <span class="wallet-text">Wallet</span> - <span class="sbt-yellow">Soulbound Token</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
@@ -2357,7 +2396,7 @@
                     <!-- New Early Supporter Box -->
                     <div class="feature">
                         <div class="feature-logo">
-                            <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                            <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
                             <span class="yellow-word">Marked</span> <span class="small-word">as</span> <span class="small-word">an</span> <span class="early-text">Early Supporter</span> <span class="small-word">of</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
@@ -2366,7 +2405,7 @@
                     
                     <div class="feature">
                         <div class="feature-logo">
-                            <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                            <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                         </div>
                         <p class="feature-text">
                             <span class="yellow-word">Future</span> <span class="yellow-word">Beneficial</span> <span class="small-word">access</span> <span class="small-word">to</span> <span class="mirza-text"><span class="mirza-first-letter">M</span>IRZA</span> <span class="ecosystem-text">ECOSYSTEM</span>
@@ -2382,7 +2421,7 @@
                 
                 <a href="mint.html" class="mint-button">
                     <div class="button-logo">
-                        <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="MIRZA Logo">
+                        <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="MIRZA Logo">
                     </div>
                     <span class="button-text">GET EARLY ACCESS</span>
                 </a>
@@ -2393,28 +2432,28 @@
         <div class="quick-links">
             <a href="mint.html" class="quick-link-card">
                 <div class="quick-link-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="Mint SBT">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="Mint SBT">
                 </div>
                 <h3 class="quick-link-title"><span class="quick-link-mint">MINT</span> <span class="quick-link-sbt">SBT</span></h3>
                 <p class="quick-link-description"><span class="quick-link-small-text">Join</span> <span class="quick-link-small-text">the</span> <span class="sepolia-text">Sepolia launch</span> - <span class="quick-link-small-text">Get</span> <span class="quick-link-small-text">your</span> <span class="mint-sbt-unique">unique</span> <span class="mint-sbt-soulbound">Soulbound Token</span></p>
             </a>
             <a href="defi.html" class="quick-link-card">
                 <div class="quick-link-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="DeFi Platform">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="DeFi Platform">
                 </div>
                 <h3 class="quick-link-title"><span class="defi-text">DeFi</span> <span class="defi-platform-text">PLATFORM</span></h3>
                 <p class="quick-link-description"><span class="defi-small-text">Explore</span> <span class="defi-decentralized">decentralized finance</span> <span class="defi-small-text">features</span></p>
             </a>
             <a href="ecosystem.html" class="quick-link-card">
                 <div class="quick-link-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="Ecosystem">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="Ecosystem">
                 </div>
                 <h3 class="quick-link-title"><span class="ecosystem-text">ECOSYSTEM</span></h3>
                 <p class="quick-link-description"><span class="ecosystem-small-text">Discover</span> <span class="ecosystem-small-text">our</span> <span class="ecosystem-small-text">full</span> <span class="ecosystem-platform">platform</span> <span class="ecosystem-small-text">offerings</span></p>
             </a>
             <a href="roadmap.html" class="quick-link-card">
                 <div class="quick-link-logo">
-                    <img src="https://i.ibb.co/QjcgRzkB/mizpp.png" alt="Roadmap">
+                    <img src="https://i.ibb.co/zH0cmJ4S/mirzalogo.png" alt="Roadmap">
                 </div>
                 <h3 class="quick-link-title"><span class="roadmap-text">ROADMAP</span></h3>
                 <p class="quick-link-description"><span class="roadmap-small-text">See</span> <span class="roadmap-small-text">our</span> <span class="roadmap-small-text">exciting</span> <span class="roadmap-future">future</span> <span class="roadmap-small-text">plans</span></p>
