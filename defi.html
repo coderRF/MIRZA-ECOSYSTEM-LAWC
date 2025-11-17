@@ -10,19 +10,25 @@
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co/zH0cmJ4S/mirzalogo.png">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
-        /* Your existing CSS styles remain unchanged */
+        /* Base Styles - Mobile First */
         * {margin:0;padding:0;box-sizing:border-box;}
         :root{--bg:#0a1128;--accent:#00f0f0;--text:#ffffff;--success:#00ff88;--error:#ff4444;--warning:#ffaa00;}
         body{font-family:'Exo 2', sans-serif;background:linear-gradient(135deg,#0a1128,#192d55);color:var(--text);min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative;}
+
+        /* Typography Responsive */
+        h1 {font-size: 1.8rem;}
+        h2 {font-size: 1.5rem;}
+        h3 {font-size: 1.3rem;}
+        p {font-size: 1rem;}
 
         /* Wallet Connect Section */
         .wallet-connect-section {
             background: linear-gradient(135deg, rgba(10, 17, 40, 0.95), rgba(25, 45, 85, 0.95));
             border: 2px solid #00f0f0;
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 500px;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem auto;
+            max-width: 100%;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 240, 240, 0.3);
         }
@@ -30,7 +36,7 @@
         .wallet-title {
             font-family: 'Orbitron', monospace;
             color: #00f0f0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
         }
 
@@ -38,6 +44,7 @@
             color: var(--text);
             margin-bottom: 1.5rem;
             opacity: 0.8;
+            font-size: 0.9rem;
         }
 
         .wallet-connect-btn {
@@ -50,7 +57,7 @@
             font-family: 'Orbitron', monospace;
             font-weight: 700;
             font-size: 1rem;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
@@ -72,7 +79,7 @@
         .wallet-info {
             background: rgba(0, 240, 240, 0.1);
             border-radius: 15px;
-            padding: 1.5rem;
+            padding: 1.2rem;
             border: 1px solid rgba(0, 240, 240, 0.3);
         }
 
@@ -82,6 +89,7 @@
             margin-bottom: 0.8rem;
             padding-bottom: 0.8rem;
             border-bottom: 1px solid rgba(0, 240, 240, 0.2);
+            font-size: 0.9rem;
         }
 
         .wallet-status:last-child, .wallet-address:last-child, .wallet-network:last-child {
@@ -101,13 +109,13 @@
 
         .wallet-actions {
             display: flex;
+            flex-direction: column;
             gap: 0.5rem;
             margin-top: 1rem;
         }
 
         .wallet-action-btn {
-            flex: 1;
-            padding: 0.5rem 1rem;
+            padding: 0.8rem 1rem;
             border: 1px solid var(--accent);
             background: rgba(0, 240, 240, 0.1);
             color: var(--accent);
@@ -116,6 +124,7 @@
             font-family: 'Exo 2', sans-serif;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .wallet-action-btn:hover {
@@ -137,8 +146,8 @@
         .send-token-box {
             background: linear-gradient(135deg, rgba(25,45,85,0.95), rgba(10,17,40,0.95));
             border: 2px solid var(--accent);
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 15px;
+            padding: 1.5rem;
             box-shadow: 0 0 30px rgba(0, 240, 240, 0.4);
             backdrop-filter: blur(10px);
             margin-bottom: 2rem;
@@ -165,8 +174,8 @@
         }
 
         .send-token-icon {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background: rgba(0, 240, 240, 0.2);
             border-radius: 50%;
             display: flex;
@@ -176,15 +185,15 @@
         }
 
         .send-token-icon svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             fill: var(--accent);
         }
 
         .send-token-title {
             font-family: 'Orbitron', monospace;
             color: var(--accent);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
 
@@ -251,7 +260,7 @@
 
         .wallet-summary {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1rem;
             margin-bottom: 2rem;
         }
@@ -274,7 +283,7 @@
             font-family: 'Orbitron', monospace;
             color: var(--accent);
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .send-token-form {
@@ -312,6 +321,7 @@
 
         .input-with-button {
             display: flex;
+            flex-direction: column;
             gap: 0.5rem;
         }
 
@@ -337,12 +347,16 @@
             color: var(--bg);
         }
 
+        /* UPDATED: Wallet actions centered */
         .wallet-actions {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
             justify-content: center;
+            align-items: center;
         }
 
+        /* UPDATED: Action button centered */
         .action-button {
             display: inline-flex;
             align-items: center;
@@ -352,14 +366,16 @@
             font-family: 'Orbitron', monospace;
             font-weight: 700;
             font-size: 1rem;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 50px;
             text-decoration: none;
             border: none;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0, 240, 240, 0.5);
             transition: all 0.3s ease;
-            flex: 1;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
         .action-button:hover {
@@ -387,7 +403,7 @@
         }
 
         /* Side Menu Bar */
-        .side-menu-container{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:rgba(10,17,40,0.98);backdrop-filter:blur(10px);border-right:2px solid rgba(0,240,240,0.5);z-index:1000;transition:left 0.4s ease;box-shadow:5px 0 30px rgba(0,0,0,0.5);overflow-y:auto;}
+        .side-menu-container{position:fixed;top:0;left:-100%;width:280px;height:100vh;background:rgba(10,17,40,0.98);backdrop-filter:blur(10px);border-right:2px solid rgba(0,240,240,0.5);z-index:1000;transition:left 0.4s ease;box-shadow:5px 0 30px rgba(0,0,0,0.5);overflow-y:auto;}
         .side-menu-container.active{left:0;}
         .menu-header{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid rgba(0,240,240,0.3);text-align:center;}
         .menu-logo{display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;margin-bottom:1rem;}
@@ -406,37 +422,37 @@
         .menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
 
         /* DeFi Page Content */
-        .container{max-width:1200px;margin:0 auto;padding:2rem;position:relative;z-index:2;transition:transform 0.4s ease;}
+        .container{max-width:100%;margin:0 auto;padding:1.5rem;position:relative;z-index:2;transition:transform 0.4s ease;}
         .container.menu-open{transform:translateX(280px);}
-        .header{display:flex;align-items:center;justify-content:center;margin-bottom:3rem;gap:2rem;flex-wrap:wrap;}
-        .logo{width:100px;height:100px;border-radius:50%;overflow:hidden;border:3px solid #00f0f0;box-shadow:0 0 30px rgba(0,240,240,0.7);}
+        .header{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:2rem;gap:1.5rem;}
+        .logo{width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid #00f0f0;box-shadow:0 0 30px rgba(0,240,240,0.7);}
         .logo img{width:100%;height:100%;object-fit:cover;}
-        .title{font-family:'Orbitron', monospace;font-size:3rem;font-weight:900;color:#00f0f0;text-shadow:0 0 20px rgba(0,240,240,0.8);letter-spacing:2px;text-align:center;}
-        .defi-grid{display:flex;flex-direction:column;gap:2rem;margin:3rem 0;}
-        .defi-card{background:linear-gradient(135deg, rgba(25,45,85,0.9), rgba(10,17,40,0.9));border:2px solid var(--accent);border-radius:20px;padding:2.5rem;transition:all 0.3s ease;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;}
+        .title{font-family:'Orbitron', monospace;font-size:2rem;font-weight:900;color:#00f0f0;text-shadow:0 0 20px rgba(0,240,240,0.8);letter-spacing:2px;text-align:center;}
+        .defi-grid{display:flex;flex-direction:column;gap:2rem;margin:2rem 0;}
+        .defi-card{background:linear-gradient(135deg, rgba(25,45,85,0.9), rgba(10,17,40,0.9));border:2px solid var(--accent);border-radius:15px;padding:1.5rem;transition:all 0.3s ease;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;}
         .defi-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,240,240,0.3);}
         .defi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg, var(--accent), #0080ff);}
-        .defi-logo{width:80px;height:80px;border-radius:50%;overflow:hidden;border:2px solid var(--accent);box-shadow:0 0 20px rgba(0,240,240,0.5);margin:0 auto 1.5rem auto;}
+        .defi-logo{width:70px;height:70px;border-radius:50%;overflow:hidden;border:2px solid var(--accent);box-shadow:0 0 20px rgba(0,240,240,0.5);margin:0 auto 1.5rem auto;}
         .defi-logo img{width:100%;height:100%;object-fit:cover;}
-        .defi-title{font-family:'Orbitron', monospace;color:var(--accent);font-size:1.5rem;margin-bottom:1rem;font-weight:700;text-align:center;}
+        .defi-title{font-family:'Orbitron', monospace;color:var(--accent);font-size:1.3rem;margin-bottom:1rem;font-weight:700;text-align:center;}
         .defi-features{list-style:none;margin:1.5rem 0;text-align:center;}
         .defi-features li{padding:0.5rem 0;border-bottom:1px solid rgba(0,240,240,0.2);display:flex;align-items:center;justify-content:center;gap:0.5rem;}
         .defi-features li:before{content:'✓';color:var(--accent);font-weight:bold;}
-        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1.5rem;margin:2rem 0;}
-        .stat-card{background:rgba(0,240,240,0.1);border:1px solid var(--accent);border-radius:15px;padding:1.5rem;text-align:center;transition:all 0.3s ease;}
+        .stats-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;margin:2rem 0;}
+        .stat-card{background:rgba(0,240,240,0.1);border:1px solid var(--accent);border-radius:15px;padding:1.2rem;text-align:center;transition:all 0.3s ease;}
         .stat-card:hover{transform:translateY(-5px);background:rgba(0,240,240,0.15);box-shadow:0 10px 25px rgba(0,240,240,0.3);}
-        .stat-value{font-family:'Orbitron', monospace;font-size:2.5rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;}
-        .stat-label{color:var(--text);opacity:0.8;font-size:0.9rem;}
+        .stat-value{font-family:'Orbitron', monospace;font-size:1.8rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;}
+        .stat-label{color:var(--text);opacity:0.8;font-size:0.8rem;}
         
         /* Staking Form Styles */
         .staking-form {
             margin-top: 1.5rem;
-            padding: 1.5rem;
+            padding: 1.2rem;
             background: rgba(0, 240, 240, 0.05);
             border-radius: 15px;
             border: 1px solid rgba(0, 240, 240, 0.2);
             width: 100%;
-            max-width: 500px;
+            max-width: 100%;
         }
         
         .input-group {
@@ -448,7 +464,8 @@
         
         .input-row {
             display: flex;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.5rem;
             align-items: center;
             justify-content: center;
         }
@@ -456,11 +473,12 @@
         .input-label {
             font-weight: 600;
             color: var(--accent);
-            min-width: 120px;
+            width: 100%;
+            text-align: center;
         }
         
         .amount-input {
-            flex: 1;
+            width: 100%;
             background: rgba(10, 17, 40, 0.8);
             border: 1px solid var(--accent);
             border-radius: 10px;
@@ -468,7 +486,7 @@
             color: var(--text);
             font-family: 'Exo 2', sans-serif;
             font-size: 1rem;
-            max-width: 200px;
+            max-width: 100%;
         }
         
         .amount-input:focus {
@@ -499,34 +517,32 @@
         .user-stat-label {
             color: var(--text);
             opacity: 0.8;
+            font-size: 0.9rem;
         }
         
         .user-stat-value {
             font-family: 'Orbitron', monospace;
             color: var(--accent);
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        /* Action Buttons Grid */
+        /* UPDATED: Action Buttons Grid - Centered */
         .action-buttons {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
             justify-content: center;
+            align-items: center;
             width: 100%;
         }
 
-        /* Swap & LP Styles */
+        /* Swap & LP Styles - UPDATED: Now in separate rows */
         .swap-lp-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 2rem;
             margin-top: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .swap-lp-grid {
-                grid-template-columns: 1fr;
-            }
         }
         
         .swap-section, .lp-section {
@@ -534,12 +550,13 @@
             border-radius: 15px;
             border: 1px solid rgba(0, 240, 240, 0.2);
             padding: 1.5rem;
+            width: 100%;
         }
         
         .section-title {
             font-family: 'Orbitron', monospace;
             color: var(--accent);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 1rem;
             text-align: center;
         }
@@ -588,14 +605,18 @@
             font-size: 1rem;
         }
         
+        /* UPDATED: Button group centered */
         .button-group {
             display: flex;
+            flex-direction: column;
             gap: 0.5rem;
             margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
         }
         
+        /* UPDATED: Button centered */
         .btn {
-            flex: 1;
             background: rgba(0, 240, 240, 0.2);
             color: var(--accent);
             border: 1px solid var(--accent);
@@ -606,6 +627,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
+            width: 100%;
+            max-width: 200px;
         }
         
         .btn:hover {
@@ -733,7 +756,7 @@
         .main-footer {
             background: rgba(10, 17, 40, 0.95);
             border-top: 2px solid rgba(0, 240, 240, 0.5);
-            padding: 3rem 0;
+            padding: 2rem 0;
             margin-top: 4rem;
             text-align: center;
             position: relative;
@@ -741,17 +764,17 @@
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
         }
 
         .social-links {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
+            flex-direction: column;
+            gap: 1rem;
             margin: 2rem 0;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .social-link {
@@ -765,6 +788,9 @@
             border-radius: 10px;
             transition: all 0.3s ease;
             font-weight: 600;
+            width: 100%;
+            max-width: 250px;
+            justify-content: center;
         }
 
         .social-link:hover {
@@ -798,59 +824,200 @@
             font-family: 'Orbitron', monospace;
         }
         
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .wallet-summary {
-                grid-template-columns: 1fr;
+        /* Tablet Styles */
+        @media (min-width: 768px) {
+            h1 {font-size: 2.5rem;}
+            h2 {font-size: 2rem;}
+            h3 {font-size: 1.5rem;}
+            
+            .container {padding: 2rem;}
+            
+            .wallet-connect-section {
+                padding: 2rem;
+                max-width: 500px;
             }
             
-            .input-row {
-                flex-direction: column;
-                align-items: center;
+            .wallet-actions {
+                flex-direction: row;
+                justify-content: center;
             }
             
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .title {
-                font-size: 2.2rem;
-            }
-            
-            .defi-card {
-                padding: 1.5rem;
+            .wallet-action-btn {
+                flex: 1;
+                max-width: 200px;
             }
             
             .send-token-box {
+                padding: 2rem;
+                border-radius: 20px;
+            }
+            
+            .wallet-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .input-with-button {
+                flex-direction: row;
+            }
+            
+            .wallet-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .action-button {
+                width: auto;
+                max-width: 300px;
+            }
+            
+            .header {
+                flex-direction: row;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .title {
+                font-size: 3rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .stat-value {
+                font-size: 2.5rem;
+            }
+            
+            /* UPDATED: Swap and LP sections remain in separate rows on tablet */
+            .swap-lp-grid {
+                flex-direction: column;
+            }
+            
+            .swap-section, .lp-section {
+                width: 100%;
+            }
+            
+            .staking-form {
                 padding: 1.5rem;
             }
             
+            .input-row {
+                flex-direction: row;
+            }
+            
+            .input-label {
+                width: auto;
+                text-align: left;
+            }
+            
+            .amount-input {
+                max-width: 200px;
+            }
+            
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
             .button-group {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: center;
             }
-
-            .wallet-connect-section {
-                padding: 1.5rem;
-                margin: 1.5rem auto;
+            
+            .btn {
+                width: auto;
+                max-width: 200px;
             }
-
-            .wallet-actions {
-                flex-direction: column;
+            
+            .social-links {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .social-link {
+                width: auto;
             }
         }
-
-        @media (max-width: 576px) {
+        
+        /* Desktop Styles */
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1200px;
+                padding: 2rem;
+            }
+            
+            .footer-content {
+                max-width: 1200px;
+            }
+            
+            .defi-card {
+                padding: 2.5rem;
+            }
+            
+            .send-token-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .send-token-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .send-token-title {
+                font-size: 1.3rem;
+            }
+            
+            .defi-logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .defi-title {
+                font-size: 1.5rem;
+            }
+            
+            /* UPDATED: Swap and LP sections remain in separate rows on desktop */
+            .swap-lp-grid {
+                flex-direction: column;
+            }
+            
+            .swap-section, .lp-section {
+                width: 100%;
+            }
+        }
+        
+        /* Large Desktop Styles */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+        }
+        
+        /* Small Mobile Adjustments */
+        @media (max-width: 360px) {
+            .container {
+                padding: 1rem;
+            }
+            
             .wallet-connect-section {
                 padding: 1.2rem;
             }
-
-            .wallet-title {
-                font-size: 1.3rem;
+            
+            .send-token-box {
+                padding: 1.2rem;
             }
-
-            .wallet-connect-btn {
-                padding: 0.8rem 1.5rem;
-                font-size: 0.9rem;
+            
+            .defi-card {
+                padding: 1.2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -994,9 +1161,9 @@
             </div>
         </div>
 
-        <!-- Swap & Liquidity Pool Section -->
+        <!-- Swap & Liquidity Pool Section - UPDATED: Now in separate rows -->
         <div class="swap-lp-grid">
-            <!-- Swap Section -->
+            <!-- Swap Section - Now on top -->
             <div class="swap-section">
                 <h2 class="section-title">SWAP TOKENS</h2>
                 <p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.8;">Trade between ETH and MIRZA instantly</p>
@@ -1029,7 +1196,7 @@
                 <div class="status" id="swapStatus"></div>
             </div>
             
-            <!-- Liquidity Pool Section - Updated with working code -->
+            <!-- Liquidity Pool Section - Now below Swap -->
             <div class="lp-section">
                 <h2 class="section-title">LIQUIDITY POOL</h2>
                 <p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.8;">Provide liquidity to earn fees</p>
